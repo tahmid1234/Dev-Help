@@ -34,7 +34,12 @@ const PostFlatList =(props)=>{
           
            
              />
-              <TouchableOpacity onPress={() => { showMessage({
+             
+
+              <TouchableOpacity onPress={() => 
+              //This onpress function navigates to Question Witting Screen
+              {  props.props.navigation.navigate("QueryPost")
+                showMessage({
                 message: "My message title",
                 description: "My message description",
                 type: "default",
