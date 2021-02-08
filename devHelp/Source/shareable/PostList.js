@@ -1,34 +1,27 @@
-import React , { useState, useEffect }  from 'react'
-import {View,Button,Flatlist,Text,ActivityIndicator,StyleSheet,TouchableOpacity} from 'react-native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import React , { useState}  from 'react'
+import {Text,StyleSheet,TouchableOpacity} from 'react-native'
 import {PostCard} from '../shareable/customCard'
-import { getDataJSON, storeDataJSON } from "../Function/AsyncStorageFunction";
 import { Zocial } from '@expo/vector-icons';
-import { FontAwesome } from '@expo/vector-icons';
+import { FontAwesome ,Entypo,EvilIcons} from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
-import {AuthContext} from '../provider/AuthProvider';
 import * as firebase from 'firebase'
 import "firebase/firestore";
 
 const PostList =(props)=>{
    
-    const posts=props.posts
+    const query=props.posts
     const nav=props.nav
     const currUser=props.currentUser
-  
-
-    
+    const nextScreen=props.nextScreen
+      
     const [iconName,setIconName]=useState("hearto")
-   
-    const [likeCount,setLikeCount]=useState(posts.data.likes)
-    const [authorPostReactions, setAuthorPostReactions] = useState([]);
-    
-
-    let dateObj=new Date(posts.data.created_at.seconds*1000)
+    const [likeCount,setLikeCount]=useState(query.data.likes)
+       
+    let dateObj=new Date(query.data.created_at.seconds*1000)
   
     dateObj=""+dateObj.toUTCString()
 
-    
+    console.log(likeCount)
     
     let postDate=dateObj.substr(0,dateObj.length-13)
    
@@ -36,34 +29,32 @@ const PostList =(props)=>{
     
     return(
         
-       
+        <TouchableOpacity onPress={function(){
+            nav.navigation.navigate(nextScreen,  {query,currUser,postDate} );
+           }}>
        <PostCard>
            
            <Zocial name="statusnet" size={24} color="#fff"  style={styles.iconStyle} />
-           <Text style={styles.authorNameStyle}>{posts.data.author}</Text>
+           <Text style={styles.authorNameStyle}>{query.data.title}</Text>
            <Text style={styles.dateStyle}>{postDate}</Text>
-           <Text style={styles.postBodyStyle}>{posts.data.body}</Text>
+           <Text numberOfLines={2}  style={styles.postBodyStyle}>{query.data.body}</Text>
           
            <FontAwesome name="comment-o" size={27} color="#fff"  style={styles.commentStyle}
-           onPress={function(){
-            nav.navigation.navigate("IndivialPost",  {posts,currUser,postDate} );
-           
-           
-           }}/>
+           />
 
-          
-           <AntDesign name={iconName} size={24} color="#fff"  style={styles.likeStyle} 
+
+           <AntDesign name="like1" size={20} color="#fff"  style={styles.likeStyle} 
            onPress ={function(){
             setIconName("heart")
            
-           firebase.firestore().collection("posts").doc(posts.id).collection("likers").doc(currUser.uid).set({
+           firebase.firestore().collection("query").doc(query.id).collection("likers").doc(currUser.uid).set({
                liker:currUser.displayName
            })
-           firebase.firestore().collection("posts").doc(posts.id).update({
+           firebase.firestore().collection("query").doc(query.id).update({
                likes:likeCount+1
            })
-           firebase.firestore().collection("notifications").doc(posts.data.userId).collection("notification_details").add({
-            post:posts,
+           firebase.firestore().collection("notifications").doc(query.data.userId).collection("notification_details").add({
+            post:query,
             name:currUser.displayName,
             body:"liked your post"
         })
@@ -76,13 +67,14 @@ const PostList =(props)=>{
             
            }}/>
           
-        <Text style={styles.likeTextStyle} >{likeCount} Likes</Text>
-        <Text style={styles.commentTextStyle}>{posts.data.comments} Comments</Text>
+        <Text style={styles.likeTextStyle} >{query.data.likes} Likes</Text>
+        <Text style={styles.commentTextStyle}>{query.data.comments} Answers</Text>
           
    
            
-
+        
        </PostCard>
+       </TouchableOpacity>
   
 
 
@@ -106,7 +98,7 @@ const styles=StyleSheet.create({
     },
     commentStyle:{
         position:'absolute',
-        bottom:1,
+        bottom:6.8,
         right:10,
         marginBottom:0,
         
@@ -116,6 +108,7 @@ const styles=StyleSheet.create({
         fontSize:18,
         color:"#fff",
         marginBottom:5,
+        paddingRight:20
     },
     dateStyle:{
         
@@ -130,12 +123,18 @@ const styles=StyleSheet.create({
         color:"#fff",
         fontSize:15,
         
+        
+  
+        
+        
     },
     likeStyle:{
         marginBottom:3,
         bottom:0,
         width:36,
-        left:0
+        left:0,
+        borderColor:"#108",
+        
     },
    
     likeTextStyle:{
@@ -145,9 +144,9 @@ const styles=StyleSheet.create({
         color:"#fff",
         
         width:60,
-        left:30,
+        left:31,
         position:"absolute",
-        bottom:0
+        bottom:6.8
     },
     commentTextStyle:{
         marginBottom:3,
@@ -156,9 +155,9 @@ const styles=StyleSheet.create({
         color:"#fff",
         
         width:90,
-        right:36,
+        right:21,
         position:"absolute",
-        bottom:0
+        bottom:6.8
     },
 
   

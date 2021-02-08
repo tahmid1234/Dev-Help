@@ -39,7 +39,7 @@ const styles= StyleSheet.create({
        marginRight:20,
        
        borderWidth:1,
-       borderColor:"#fc6a03",
+       borderColor:"#000",
        
 
 
@@ -53,6 +53,10 @@ const styles= StyleSheet.create({
         marginTop:5,
         backgroundColor:"#000",
         marginBottom:20,
+        padding:8,
+        borderWidth:1.3,
+        borderColor: '#308',
+        
         
     },
     commentCardStyle:{

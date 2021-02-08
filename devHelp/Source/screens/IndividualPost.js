@@ -5,10 +5,12 @@ import {PostCard} from '../shareable/customCard'
 import { MaterialCommunityIcons,Entypo } from '@expo/vector-icons';
 import {  Input } from "react-native-elements";
 import { FontAwesome ,AntDesign} from '@expo/vector-icons';
-import { storeDataJSON,removeData } from "../Function/AsyncStorageFunction";
 import CommentList from '../shareable/CommentList'
 import * as firebase from 'firebase'
 import "firebase/firestore";
+import {_handleOpenWithWebBrowserUbuntuPastebin} from '../Function/LinkOpeningFunction'
+import {setDataCollection,getLikeCounts,updateLikeCount,updateCount} from '../Function/FirebaseFunctions'
+import {AuthContext} from '../provider/AuthProvider'
 
 const months={
     0:"January",
@@ -28,13 +30,56 @@ const months={
 const IndividualPostScreen=(props)=>{
     //console.log(props)
     let comment_=[]
-    const posts=props.route.params.posts
+    
+    const posts=props.route.params.query
     const postDate=props.route.params.postDate
     const currUser=props.route.params.currUser
     const [loading, setLoading] = useState(false);
     const[comments,setComments]=useState(0)
     const [commentsCount,setCommentCount]=useState(posts.data.comments)
     const [currentInputText,setCurrentInputText]=useState("")
+    const [postLikes,setPostLikes] = useState(0)
+    const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
+    const likeIcosn = {"0":"like2","1":"like1","-1":"like2"}
+    const disLikeIcon = {"0":"dislike2","1":"dislike2","-1":"dislike1"}
+    const [increaseBy,setIncreaseBy]=useState(0)
+    const [currentLikes,setCurrentLikes]=useState(posts.data.likes)
+    
+    
+
+    const onDisLikePressed = async () =>{
+        if(parseInt( posts.data.likes)!=-1){
+       
+        setIncreaseBy(increaseBy -1-postLikes)
+        console.log("dataaaaa")
+        console.log(parseInt( posts.data.likes))
+        
+        updateLikeCount(-1-postLikes,posts.id,posts.data.keyPoints,posts.data.categoryName)
+        setPostLikes(-1)
+        setDataCollection(posts.id,uid,{likes:-1})
+        updateCount("NotificationCount",posts.data.authorId,1)
+        
+        
+        }
+    }
+
+    const onLikePressed = async () =>{
+        if(postLikes!=1){
+       
+        setIncreaseBy(increaseBy+ 1-postLikes)
+        
+       
+        
+        updateLikeCount(1-postLikes,posts.id,posts.data.keyPoints,posts.data.categoryName)
+        setPostLikes(1)
+        setDataCollection(posts.id,uid,{likes:1})
+        updateCount("NotificationCount",posts.data.authorId,1)
+        
+        
+        
+        }
+    }
+
     const loadComments = async () => {
         setLoading(true)
         firebase
@@ -61,9 +106,22 @@ const IndividualPostScreen=(props)=>{
           });
         
       };
+
+      
+      
         
       useEffect(() => {
+        let isMounted=true
+        if(isMounted)
+        {
+            setIncreaseBy(parseInt( posts.data.likes))
+        }
+         getLikeCounts(posts.id,uid,setPostLikes,isMounted)
+         console.log(postLikes)
         loadComments();
+
+        return () => { isMounted = false}
+
       }, []);
     
  
@@ -73,17 +131,49 @@ const IndividualPostScreen=(props)=>{
     
       <View style={styles.containerStyle}>  
            <ScreenHeader props ={props} ></ScreenHeader>
-           <PostCard>
-          
-           <Entypo name="man" size={24} color="#c08401"  style={{width:20}}/>
-           <Text style={styles.authorTextSTyle}>{posts.data.author}</Text>
-            <Text style={styles.dateStyle}>{postDate}</Text>
+           <PostCard >
+               <View style={{backgroundColor:"white",padding:3.5}}>
+               <View style={{flexDirection:"row"}}>
+                    <Entypo name="man" size={24}  color="#5CF" style={{height:25,width:25,borderRadius:12.5,backgroundColor:"black"}}/>
+                    <View>
+                        
+                        <Text style={styles.authorTextSTyle}>{posts.data.author}</Text>
+                        <Text style={styles.dateStyle}>{postDate}</Text>
+                    </View>
+                </View>
+           <Text style={styles.postTitleStyle}>{posts.data.title} </Text>
+            
            <Text style={styles.postBodyStyle}>{posts.data.body}</Text>
-           <AntDesign name="heart" size={23} color="#fc4601"  style={styles.likeStyle} />
-           <FontAwesome name="comment-o" size={27} color="#fc6a03"  style={styles.commentStyle}/>
-           <Text style={styles.likeTextStyle} >{posts.data.likes} Likes </Text>
+           {posts.data.link["linkCoverName"]?
+            <View>
+            <Text style={styles.linkCoverName}  onPress={() => _handleOpenWithWebBrowserUbuntuPastebin(posts.data.link[posts.data.link["linkCoverName"]])}> {posts.data.link["linkCoverName"]}</Text>
+         </View>
+         :
+         <Text style={{color:"white"}}>ashe nai</Text>
+           }
+           <View>
+              <Text> {posts.data["linkCoverName"]}</Text>
+           </View>
+           <View style={{flexDirection:"row"}}>
+           <AntDesign name={likeIcosn[postLikes]} size={24} color="#5CF"  
+                style={styles.likeStyle}
+                onPress = {onLikePressed} />
+            
+           <Text style={styles.likeTextStyle} >{increaseBy} </Text>
+           <AntDesign name={disLikeIcon[postLikes]} size={24} color="#5CF"  
+                style={styles.disLikeStyle} 
+                onPress={onDisLikePressed} />
+           </View>
+         
+          
+           <FontAwesome name="comment-o" size={27} color="#5CF"  style={styles.commentStyle}/>
+          
+          
            <Text style={styles.commentTextStyle}>{commentsCount} Comments</Text>
            
+
+               </View>
+               
            </PostCard>
 
            <Input
@@ -103,7 +193,7 @@ const IndividualPostScreen=(props)=>{
                    setCurrentInputText(currentInput)
                 }}
               />
-             <AntDesign name="checkcircle" size={30} color="#fc6a03" style={{marginHorizontal:180,marginBottom:20}}
+             <AntDesign name="checkcircle" size={30} color="#1AF" style={{marginHorizontal:180,marginBottom:20}}
              onPress={function(){
                   comment_={
                     writer:currUser.displayName,
@@ -153,26 +243,26 @@ const IndividualPostScreen=(props)=>{
 
 const styles=StyleSheet.create({
     authorTextSTyle:{
-        left:29,
-        position:"absolute",
+        left:1,
+        
         fontFamily:'serif',
-        fontSize:23,
-        color:"#c08401",
-        marginBottom:5
+        fontSize:15,
+        color:"#1AF",
+       
     },
     dateStyle:{
         
         marginBottom:5,
-        color:"#c08401",
-        fontSize:10,
+        color:"#5CF",
+        fontSize:9,
         fontStyle:'italic',
-        marginTop:7
+      
     },
     postBodyStyle:{
-        fontFamily:'serif',
+       
         marginBottom:10,
-        color:"#c08401",
-        fontSize:19,
+        color:"#208",
+        fontSize:13,
         
     },
     inputStyle:{
@@ -187,26 +277,23 @@ const styles=StyleSheet.create({
         , 
     },
     likeTextStyle:{
-        marginBottom:3,
-        fontSize:14,
+       
+        fontSize:18,
         fontFamily:'serif',
-        color:"#fc6a03",
-        
-        width:60,
-        left:30,
-        position:"absolute",
-        bottom:0
+        color:"#5CF",
+        bottom:3.1,
+        marginLeft:4
     },
     commentTextStyle:{
         marginBottom:3,
         fontSize:14,
         fontFamily:'serif',
-        color:"#fc6a03",
+         color:"#5CF",
         
         width:90,
         right:36,
         position:"absolute",
-        bottom:0
+        bottom:6.8
     },
    
     commentStyle:{
@@ -217,10 +304,56 @@ const styles=StyleSheet.create({
         
     },
     likeStyle:{
-        marginBottom:3,
-        bottom:0,
+       
+        bottom:6.8,
+       
+       
+        transform: [{rotateY: '180deg'}],
+        
+
+      
+        height:30,
+        
+        
+        
+    },
+    disLikeStyle:{
+       
+       
+        
+       
+        bottom:-1.5,
+        
+
         width:36,
-        left:0
+      
+        
+
+       
+    },
+
+    postTitleStyle:{
+        fontFamily:'serif',
+        marginBottom:3,
+        color:"#1AF",
+        fontSize:17,
+        
+    },
+    postTitleStyle:{
+        fontFamily:'serif',
+        marginBottom:3,
+        color:"#1AF",
+        fontSize:17,
+        
+    },
+    linkCoverName:{
+        fontFamily:'serif',
+        marginBottom:3,
+        color:"#1AF",
+        fontSize:13,
+        textDecorationLine: 'underline',
+        left:2
+        
     },
 })
 

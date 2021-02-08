@@ -2,6 +2,7 @@ import React from 'react'
 import {createStackNavigator} from '@react-navigation/stack';
 import AppDrawer from './AppDrawer'
 import QueryPostScreenActivity from '../screens/QueryPostScreen'
+import IndividualPostScreen from '../screens/IndividualPost'
 
 const DrawerStack= createStackNavigator();
 
@@ -20,6 +21,13 @@ const DrawerStackNavigation = () => {
           options={{ headerShown: false }}
           
         />
+        <DrawerStack.Screen
+          name="Post And Comment"
+          component={IndividualPostScreen}
+          options={{ headerShown: false }}
+          
+        />
+
       </DrawerStack.Navigator>
     );
   };

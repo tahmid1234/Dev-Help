@@ -4,30 +4,33 @@ import { FontAwesome, Feather, AntDesign ,Ionicons ,Fontisto,Entypo } from "@exp
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import PostList from './PostList'
+import CategoryCard from '../shareable/CategoryCard'
 
 const PostFlatList =(props)=>{
 
-    console.log("Render")
-    //console.log(posts)
-    console.log(props.queries)
+    const queries=props.queries
+    const categoryName={name:props.categoryName}
+    
+   
+                    
 
     return(
         <View style={{flex:1}}>
               <FlashMessage position="top" /> 
             <FlatList
             
-            data={props.queries}
-            extraData={props.queries}
+            data={queries}
+            extraData={queries}
            
             renderItem={function({ item } ){
-              console.log("Render")
+              console.log("Renderrrrrrrr")
               //console.log(posts)
-              console.log(props.currentUser)
+              console.log(item.data.likes)
              
              
               return (
                  
-                 <PostList posts={item} nav={props.props} currentUser={props.currentUser}/>
+                <PostList posts={item} nav={props.props} currentUser={props.currentUser} nextScreen={"Post And Comment"}/>
                  
                  )
           }}
@@ -37,8 +40,10 @@ const PostFlatList =(props)=>{
              
 
               <TouchableOpacity onPress={() => 
+              
               //This onpress function navigates to Question Witting Screen
-              {  props.props.navigation.navigate("QueryPost")
+              { let a=[{key:5}]
+                 props.props.navigation.navigate("QueryPost",{categoryName})
                 showMessage({
                 message: "My message title",
                 description: "My message description",

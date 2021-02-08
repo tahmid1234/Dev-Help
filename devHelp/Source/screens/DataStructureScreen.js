@@ -8,55 +8,53 @@ import CategoryCard from '../shareable/CategoryCard'
 import PostFlatList from "../shareable/postFlatList";
 import LoadingView from "../shareable/loadingView"
 import NoQueriesView from "../shareable/noQueriesView"
-
-
-
-
-
-
-
+import {getData1Collection} from '../Function/FirebaseFunctions'
 
 const DataStructureScreenActivity=(props)=>{
     
   //console.log(props)
-  console.log("okayy")
+  //console.log("okayy")
   
   const [queries, setQueries] = useState([]);
   const [loading, setLoading] = useState(false);
+  const category="Data- Structure"
  
   const loadQueries = async () => {
-    setLoading(true)
-    firebase
-      .firestore()
-      .collection("posts").doc("dataStructure").collection("queries")
-      .orderBy("created_at", "desc")
-      .onSnapshot((querySnapshot) => {
-        let temp_posts = [];
-        querySnapshot.forEach((doc) => {
-          temp_posts.push({
-            id: doc.id,
-            data: doc.data(),
-          });
-        });
-        setQueries(temp_posts);
-        console.log("Temp")
-        console.log(temp_posts)
-        
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        alert(error);
-      });
+    
+    await getData1Collection(category,setQueries,setLoading)
+    console.log("Queryyyy")
+    //console.log(queries.data.likes)
+    console.log("Queryyyy")
+    
     
   };
+
     
   useEffect(() => {
+    let isMount = true
+    if(isMount)
     loadQueries();
+
+    return ( ()=>{
+      isMount=false
+    })
+    
   }, []);
 
-    //console.log("Lets see")
-    //console.log(queries)
+  
+
+  const a = () =>{
+    console.log("jhaaak")
+  }
+  useEffect (()=>{
+    let isMount = true
+    if(isMount)
+    a()
+    return ( ()=>{
+      isMount=false
+    })
+  },[queries])
+  
  
     return(
 
@@ -68,20 +66,20 @@ const DataStructureScreenActivity=(props)=>{
        <View style={{flex:1}}>
         
            <ScreenHeader props ={props} ></ScreenHeader>
-           <CategoryCard categoryName={"Data- Structure"} dx={"-5"} dy={-18}>
+           <CategoryCard categoryName={category} dx={"-5"} dy={-18}>
 
-             <Text>Data Structure</Text>
+             <Text>{}</Text>
      
            </CategoryCard>
 
            {!queries.length?
             <NoQueriesView/>:
-            <Text></Text>
+            null
             }
 
             {!loading
             ?           
-               <PostFlatList queries={queries} props={props} currentUser={auth.CurrentUser}/>
+               <PostFlatList categoryName={category} queries={queries} props={props} currentUser={auth.CurrentUser}/>
             : 
               <LoadingView/>}  
         </View>

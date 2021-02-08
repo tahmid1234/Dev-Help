@@ -14,4 +14,6 @@ expo install expo-image-picker
 npm i react-native-svg
 npm install react-native-scrollable-tab-view
 npm i react-native-flash-message
+expo install expo-web-browser
+</KeyboardAwareScrollView>
 

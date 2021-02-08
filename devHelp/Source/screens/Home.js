@@ -11,6 +11,7 @@ import PostList from '../shareable/PostList'
 import * as firebase from 'firebase'
 import "firebase/firestore";
 import CategoryCard from '../shareable/CategoryCard'
+import {getData1Collection} from '../Function/FirebaseFunctions'
 
 
 
@@ -29,29 +30,9 @@ const HomeScreenActivity=(props)=>{
 
 
   const loadPosts = async () => {
+   
     setLoading(true)
-    firebase
-      .firestore()
-      .collection("posts")
-      .orderBy("created_at", "desc")
-      .onSnapshot((querySnapshot) => {
-        let temp_posts = [];
-        querySnapshot.forEach((doc) => {
-          temp_posts.push({
-            id: doc.id,
-            data: doc.data(),
-          });
-        });
-        setPosts(temp_posts);
-        console.log("Temp")
-        console.log(temp_posts)
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        alert(error);
-      });
-    
+    getData1Collection("all",setPosts,setLoading)
   };
     
   useEffect(() => {
@@ -95,7 +76,7 @@ const HomeScreenActivity=(props)=>{
              
               return (
                  
-                 <PostList posts={item} nav={props} currentUser={auth.CurrentUser}/>
+                 <PostList posts={item} nav={props} currentUser={auth.CurrentUser} nextScreen={"IndivialPost"}/>
                  
                  )
           }}
