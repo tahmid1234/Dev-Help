@@ -41,7 +41,13 @@ const updateCount = (collection,docId,increaseBy) =>{
     })
 }
 
-//nested collection
+//nestedCollection with add
+const addDataCollection = (collection1,docId1,collection2,data) => {
+  firebase.firestore().collection(collection1).doc(docId1).collection(collection2).add(data).then().catch((err)=>{alert(err)})
+
+}
+
+//nested collection with set
 const setDataCollection = (collection,docId,data) => {
   console.log(data)
   firebase.firestore().collection("queries").doc(collection).collection("likers").doc(docId).set(data).then(()=>{
@@ -79,4 +85,4 @@ const getLikeCounts = async( collection,docId,setCollection,isMounted) =>{
 
 
 
-export {getData1Collection,getLikeCounts,setDataCollection,updateLikeCount,updateCount};
+export {getData1Collection,getLikeCounts,setDataCollection,updateLikeCount,updateCount,addDataCollection};

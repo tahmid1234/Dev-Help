@@ -3,6 +3,7 @@ import {createStackNavigator} from '@react-navigation/stack';
 import AppDrawer from './AppDrawer'
 import QueryPostScreenActivity from '../screens/QueryPostScreen'
 import IndividualPostScreen from '../screens/IndividualPost'
+import CommentPostActivity from '../screens/CommnetPostScreen'
 
 const DrawerStack= createStackNavigator();
 
@@ -27,6 +28,15 @@ const DrawerStackNavigation = () => {
           options={{ headerShown: false }}
           
         />
+
+        <DrawerStack.Screen
+          name="Post the comment"
+          component={CommentPostActivity}
+          options={{ headerShown: false }}
+          
+        />
+
+
 
       </DrawerStack.Navigator>
     );

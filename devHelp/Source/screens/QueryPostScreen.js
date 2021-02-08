@@ -10,6 +10,7 @@ import KeyPointSimilarPost from '../shareable/keyPointsSimilarPost'
 import {AuthContext} from '../provider/AuthProvider'
 import * as firebase from 'firebase';
 import "firebase/firestore";
+import InactiveHeader from '../shareable/inactiveHeader'
 
 //keys need to be checked to ensure no invalid char has been passed to fb 
 const QueryPostScreenActivity = (props) =>{
@@ -28,7 +29,7 @@ const QueryPostScreenActivity = (props) =>{
     //allow to pop up
     const toggleLinkOverlay = () => {
 
-        console.log(links.current)
+       
         setLinkVisible(!linkVisible);
     };
 
@@ -88,7 +89,7 @@ const QueryPostScreenActivity = (props) =>{
     
     //opnes ubuntu pastebim
     const _handleOpenWithWebBrowserUbuntuPastebin = () => {
-        console.log("Whats up")
+        
         WebBrowser.openBrowserAsync('https://pastebin.ubuntu.com/');
       };
       
@@ -99,7 +100,7 @@ const QueryPostScreenActivity = (props) =>{
     return(
         <View style={{flex:1}}>
 
-           <ScreenHeader props ={props} ></ScreenHeader>
+          <InactiveHeader headerText={"Write Your Question"}/>
 
            <ScrollView keyboardShouldPersistTaps={"always"}>
 

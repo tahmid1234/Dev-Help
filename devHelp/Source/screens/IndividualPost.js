@@ -1,5 +1,5 @@
 import React , { useState, useEffect }  from 'react'
-import {Text,Button,View,StyleSheet,TextInput,FlatList} from 'react-native'
+import {Text,Button,View,StyleSheet,TextInput,FlatList,TouchableOpacity} from 'react-native'
 import ScreenHeader from '../shareable/ScreenHeader'
 import {PostCard} from '../shareable/customCard'
 import { MaterialCommunityIcons,Entypo } from '@expo/vector-icons';
@@ -9,8 +9,9 @@ import CommentList from '../shareable/CommentList'
 import * as firebase from 'firebase'
 import "firebase/firestore";
 import {_handleOpenWithWebBrowserUbuntuPastebin} from '../Function/LinkOpeningFunction'
-import {setDataCollection,getLikeCounts,updateLikeCount,updateCount} from '../Function/FirebaseFunctions'
+import {setDataCollection,getLikeCounts,updateLikeCount,updateCount, addDataCollection} from '../Function/FirebaseFunctions'
 import {AuthContext} from '../provider/AuthProvider'
+import { Touchable } from 'react-native';
 
 const months={
     0:"January",
@@ -31,25 +32,34 @@ const IndividualPostScreen=(props)=>{
     //console.log(props)
     let comment_=[]
     
-    const posts=props.route.params.query
-    const postDate=props.route.params.postDate
-    const currUser=props.route.params.currUser
+    const posts = props.route.params.query
+    const postDate = props.route.params.postDate
+    const currUser = props.route.params.currUser
+    //const nav = props.route.params.nav
+
     const [loading, setLoading] = useState(false);
     const[comments,setComments]=useState(0)
     const [commentsCount,setCommentCount]=useState(posts.data.comments)
     const [currentInputText,setCurrentInputText]=useState("")
     const [postLikes,setPostLikes] = useState(0)
     const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
+    const displayName=AuthContext.Consumer._currentValue.CurrentUser.displayName
     const likeIcosn = {"0":"like2","1":"like1","-1":"like2"}
     const disLikeIcon = {"0":"dislike2","1":"dislike2","-1":"dislike1"}
     const [increaseBy,setIncreaseBy]=useState(0)
     const [currentLikes,setCurrentLikes]=useState(posts.data.likes)
+    posts.data["reactorId"]=uid
+    posts.data["reactorName"]=displayName
+    posts.data["postId"]=posts.id
     
     
 
     const onDisLikePressed = async () =>{
         if(parseInt( posts.data.likes)!=-1){
-       
+        
+        posts.data["reactorStatus"]="disliked your post"
+        posts.data["likes"]=increaseBy -1-postLikes
+        posts.data["reaction_time"]=firebase.firestore.Timestamp.now(),
         setIncreaseBy(increaseBy -1-postLikes)
         console.log("dataaaaa")
         console.log(parseInt( posts.data.likes))
@@ -58,22 +68,24 @@ const IndividualPostScreen=(props)=>{
         setPostLikes(-1)
         setDataCollection(posts.id,uid,{likes:-1})
         updateCount("NotificationCount",posts.data.authorId,1)
+        addDataCollection("Notification",posts.data.authorId,"reaction",posts.data)
         
         
         }
     }
 
     const onLikePressed = async () =>{
+
         if(postLikes!=1){
-       
+        posts.data["reactorStatus"]="liked your post"
+        posts.data["likes"]=increaseBy+ 1-postLikes
+        posts.data["reaction_time"]=firebase.firestore.Timestamp.now(),
         setIncreaseBy(increaseBy+ 1-postLikes)
-        
-       
-        
         updateLikeCount(1-postLikes,posts.id,posts.data.keyPoints,posts.data.categoryName)
         setPostLikes(1)
         setDataCollection(posts.id,uid,{likes:1})
         updateCount("NotificationCount",posts.data.authorId,1)
+        addDataCollection("Notification",posts.data.authorId,"reaction",posts.data)
         
         
         
@@ -129,71 +141,64 @@ const IndividualPostScreen=(props)=>{
     
     return(
     
-      <View style={styles.containerStyle}>  
-           <ScreenHeader props ={props} ></ScreenHeader>
-           <PostCard >
-               <View style={{backgroundColor:"white",padding:3.5}}>
-               <View style={{flexDirection:"row"}}>
-                    <Entypo name="man" size={24}  color="#5CF" style={{height:25,width:25,borderRadius:12.5,backgroundColor:"black"}}/>
-                    <View>
-                        
-                        <Text style={styles.authorTextSTyle}>{posts.data.author}</Text>
-                        <Text style={styles.dateStyle}>{postDate}</Text>
-                    </View>
-                </View>
-           <Text style={styles.postTitleStyle}>{posts.data.title} </Text>
-            
-           <Text style={styles.postBodyStyle}>{posts.data.body}</Text>
-           {posts.data.link["linkCoverName"]?
-            <View>
-            <Text style={styles.linkCoverName}  onPress={() => _handleOpenWithWebBrowserUbuntuPastebin(posts.data.link[posts.data.link["linkCoverName"]])}> {posts.data.link["linkCoverName"]}</Text>
-         </View>
-         :
-         <Text style={{color:"white"}}>ashe nai</Text>
-           }
-           <View>
-              <Text> {posts.data["linkCoverName"]}</Text>
-           </View>
-           <View style={{flexDirection:"row"}}>
-           <AntDesign name={likeIcosn[postLikes]} size={24} color="#5CF"  
-                style={styles.likeStyle}
-                onPress = {onLikePressed} />
-            
-           <Text style={styles.likeTextStyle} >{increaseBy} </Text>
-           <AntDesign name={disLikeIcon[postLikes]} size={24} color="#5CF"  
-                style={styles.disLikeStyle} 
-                onPress={onDisLikePressed} />
-           </View>
+        <View style={styles.containerStyle}>  
+        <ScreenHeader props ={props} ></ScreenHeader>
+        <PostCard >
+            <View style={{backgroundColor:"white",padding:3.5}}>
+            <View style={{flexDirection:"row"}}>
+                 <Entypo name="man" size={24}  color="#5CF" style={{height:25,width:25,borderRadius:12.5,backgroundColor:"black"}}/>
+                 <View>
+                     
+                     <Text style={styles.authorTextSTyle}>{posts.data.author}</Text>
+                     <Text style={styles.dateStyle}>{postDate}</Text>
+                 </View>
+             </View>
+        <Text style={styles.postTitleStyle}>{posts.data.title} </Text>
          
-          
-           <FontAwesome name="comment-o" size={27} color="#5CF"  style={styles.commentStyle}/>
-          
-          
-           <Text style={styles.commentTextStyle}>{commentsCount} Comments</Text>
+        <Text style={styles.postBodyStyle}>{posts.data.body}</Text>
+        {posts.data.link["linkCoverName"]?
+         <View>
+         <Text style={styles.linkCoverName}  onPress={() => _handleOpenWithWebBrowserUbuntuPastebin(posts.data.link[posts.data.link["linkCoverName"]])}> {posts.data.link["linkCoverName"]}</Text>
+      </View>
+      :
+      <Text style={{color:"white"}}>ashe nai</Text>
+        }
+        <View>
+           <Text> {posts.data["linkCoverName"]}</Text>
+        </View>
+        <View style={{flexDirection:"row"}}>
+        <AntDesign name={likeIcosn[postLikes]} size={24} color="#5CF"  
+             style={styles.likeStyle}
+             onPress = {onLikePressed} />
+         
+        <Text style={styles.likeTextStyle} >{increaseBy} </Text>
+        <AntDesign name={disLikeIcon[postLikes]} size={24} color="#5CF"  
+             style={styles.disLikeStyle} 
+             onPress={onDisLikePressed} />
+        </View>
+      
+       
+        <FontAwesome name="comment-o" size={27} color="#5CF"  style={styles.commentStyle}/>
+       
+       
+        <Text style={styles.commentTextStyle}>{commentsCount} Comments</Text>
+        
+
+            </View>
+            
+        </PostCard>
+
+        <TouchableOpacity style={{padding:30}} onPress={()=>{
+            props.navigation.navigate("Post the comment",{posts})
            
-
-               </View>
-               
-           </PostCard>
-
-           <Input
+        }}>
+        <Text style={{color:"#208",borderBottomColor:"#008",borderBottomWidth:1}}>Write Your Answer</Text>
+       
+        </TouchableOpacity>
               
+       
 
-                inputStyle={{color:"white"}}
-                
-                
-                placeholder="Write your comment!"
-                multiline={true}
-                
-                placeholderTextColor="white"
-                
-                inputContainerStyle={styles.inputStyle}
-                leftIcon={<Entypo name="pencil" size={24} color="white" />}
-                onChangeText={function (currentInput) {
-                   setCurrentInputText(currentInput)
-                }}
-              />
-             <AntDesign name="checkcircle" size={30} color="#1AF" style={{marginHorizontal:180,marginBottom:20}}
+<AntDesign name="checkcircle" size={30} color="#208" style={{marginHorizontal:180,marginBottom:20}}
              onPress={function(){
                   comment_={
                     writer:currUser.displayName,
@@ -237,7 +242,11 @@ const IndividualPostScreen=(props)=>{
 
 
             />
-      </View>
+        
+
+       
+    
+   </View>
     )
 }
 

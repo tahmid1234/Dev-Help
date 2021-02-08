@@ -2,6 +2,8 @@ import React from 'react'
 import {createStackNavigator} from '@react-navigation/stack';
 import HomeScreenActivity from '../screens/Home'
 import IndividualPostScreen from '../screens/IndividualPost'
+import CommentPostActivity from '../screens/CommnetPostScreen'
+
 const HomeStack =createStackNavigator();
 
 const HomeStackScreen=() =>{
@@ -9,6 +11,7 @@ const HomeStackScreen=() =>{
       <HomeStack.Navigator initialRouteName="Home">
         <HomeStack.Screen name="Home" component={HomeScreenActivity}  options={{ headerShown: false }}/>
         <HomeStack.Screen name="IndivialPost" component={IndividualPostScreen}  options={{ headerShown: false }}/>
+        <HomeStack.Screen name="Post the comment" component={CommentPostActivity}  options={{ headerShown: false }}/>
       </HomeStack.Navigator>
     )
   }

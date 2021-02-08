@@ -1,6 +1,5 @@
 import React from 'react'
 import {Header} from "react-native-elements";
-import {StyleSheet} from 'react-native';
 import {AuthContext} from '../provider/AuthProvider';
 import * as  firebase from 'firebase';
 
