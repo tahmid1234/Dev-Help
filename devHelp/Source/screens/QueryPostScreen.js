@@ -33,6 +33,8 @@ const QueryPostScreenActivity = (props) =>{
         setLinkVisible(!linkVisible);
     };
 
+
+
     //question submission
 
     const onSubmit = ()=>{
@@ -49,6 +51,8 @@ const QueryPostScreenActivity = (props) =>{
                 comments:0,
                 categoryName:category[props.route.params.categoryName["name"]]
             }
+
+            console.log(postInfo)
             firebase.firestore().collection(props.route.params.categoryName["name"]).add(postInfo).then((docRef)=>{
 
                 console.log(docRef.id)

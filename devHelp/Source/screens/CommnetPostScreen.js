@@ -6,7 +6,7 @@ import {_handleOpenWithWebBrowserUbuntuPastebin} from '../Function/LinkOpeningFu
 import LinkOverlay from '../shareable/linkOverlay'
 import { Entypo,AntDesign } from '@expo/vector-icons';
 import {  Overlay } from 'react-native-elements';
-import {addDataCollection,updateCount} from '../Function/FirebaseFunctions'
+import {addDataCollection,updateCount,updatePostReactionCount} from '../Function/FirebaseFunctions'
 import {AuthContext} from '../provider/AuthProvider'
 import * as firebase from 'firebase';
 import "firebase/firestore";
@@ -57,6 +57,7 @@ const CommentPostActivity = (props) => {
         addDataCollection("PostComments",posts.id,"CommentDetails",commentDetails)
         updateCount("NotificationCount",posts.data.authorId,1)
         addDataCollection("Notification",posts.data.authorId,"reaction",posts.data)
+        updatePostReactionCount(1,posts.id,posts.data.keyPoints,posts.data.categoryName)
         props.navigation.goBack()
     }
 

@@ -37,7 +37,7 @@ const updateCount = (collection,docId,increaseBy) =>{
     const increment = firebase.firestore.FieldValue.increment(increaseBy);
     firebase.firestore().collection(collection).doc(docId).update({ count: increment }).then().catch((error)=>{
       firebase.firestore().collection(collection).doc(docId).set({ count: increment })
-     alert("Okay")
+     
     })
 }
 
@@ -48,14 +48,22 @@ const addDataCollection = (collection1,docId1,collection2,data) => {
 }
 
 //nested collection with set
-const setDataCollection = (collection,docId,data) => {
+const setDataCollection = (rootCollection,collection,docId,data) => {
   console.log(data)
-  firebase.firestore().collection("queries").doc(collection).collection("likers").doc(docId).set(data).then(()=>{
+  firebase.firestore().collection(rootCollection).doc(collection).collection("likers").doc(docId).set(data).then(()=>{
 
   }).catch((error)=>{
    
     alert("hello")
   })
+}
+
+const updatePostReactionCount = ( increaseBy,postId,keyPoints,cateGoryName) =>{
+  const increment = firebase.firestore.FieldValue.increment(increaseBy);
+  console.log(postId,cateGoryName,keyPoints)
+  firebase.firestore().collection("all").doc(postId).update({comments:increaseBy})
+  firebase.firestore().collection(keyPoints).doc(postId).update({comments:increaseBy})
+  firebase.firestore().collection(cateGoryName).doc(postId).update({comments:increaseBy})
 }
 
 const updateLikeCount = ( increaseBy,postId,keyPoints,cateGoryName) =>{
@@ -65,13 +73,30 @@ const updateLikeCount = ( increaseBy,postId,keyPoints,cateGoryName) =>{
   firebase.firestore().collection(keyPoints).doc(postId).update({ likes: increment })
   firebase.firestore().collection(cateGoryName).doc(postId).update({ likes: increment })
 }
-
-const getLikeCounts = async( collection,docId,setCollection,isMounted) =>{
+//single collection get
+const getSingleCollectionData = async( collection,docId,setCollection,isMounted) =>{
   firebase
   .firestore()
-  .collection("queries").doc(collection).collection("likers").doc(docId)
+  .collection(collection).doc(docId)
   .onSnapshot(docSnapshot => {
     if(docSnapshot.exists && isMounted){
+        setCollection(docSnapshot.data()["count"])
+        
+    }
+    // ...
+  }, err => {
+    console.log(`Encountered error: ${err}`);
+  });
+}
+
+//nested Collection
+const getLikeCounts = async( rootCollection,collection,docId,setCollection,isMounted) =>{
+  firebase
+  .firestore()
+  .collection(rootCollection).doc(collection).collection("likers").doc(docId)
+  .onSnapshot(docSnapshot => {
+    if(docSnapshot.exists && isMounted){
+       
         setCollection(docSnapshot.data()["likes"])
         
     }
@@ -79,10 +104,45 @@ const getLikeCounts = async( collection,docId,setCollection,isMounted) =>{
   }, err => {
     console.log(`Encountered error: ${err}`);
   });
-  
+}
 
+//nested collection get without doc
+const getDoubleCollectionData = async (collection1,docId,collection2,setCollection,setLoading,setListCount) => {
+  setLoading(true)
+  console.log("collectionsss")
+  console.log(collection1,collection2,docId)
+  firebase.firestore().collection(collection1)
+                    .doc(docId).collection(collection2)
+                    .orderBy("created_at", "desc")
+                    .onSnapshot ((querySnapshot) => {
+                      let temp_posts = [];
+                    
+                      querySnapshot.forEach((doc) => {
+                       
+                        temp_posts.push({
+                          id: doc.id,
+                          data: doc.data(),
+                          
+                        });
+                      });
+                      setCollection(temp_posts);
+                      setListCount(temp_posts.length)
+                      console.log("Tempooooooo")
+                      //console.log(temp_posts)
+                      
+                      setLoading(false);
+                    }, err => {
+                        alert(err)
+                        console.log(`Encountered error: ${err}`);
+                        setLoading(false);
+                      });
+}
+
+const simpleCollectionSet= (collection,docId,value) =>{
+  firebase.firestore().collection(collection).doc(docId).set({ count: value })
 }
 
 
 
-export {getData1Collection,getLikeCounts,setDataCollection,updateLikeCount,updateCount,addDataCollection};
+
+export {getData1Collection,getLikeCounts,setDataCollection,updateLikeCount,updateCount,addDataCollection,getDoubleCollectionData,getSingleCollectionData,simpleCollectionSet,updatePostReactionCount};

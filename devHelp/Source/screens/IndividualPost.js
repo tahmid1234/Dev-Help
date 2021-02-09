@@ -11,26 +11,13 @@ import "firebase/firestore";
 import {_handleOpenWithWebBrowserUbuntuPastebin} from '../Function/LinkOpeningFunction'
 import {setDataCollection,getLikeCounts,updateLikeCount,updateCount, addDataCollection} from '../Function/FirebaseFunctions'
 import {AuthContext} from '../provider/AuthProvider'
-import { Touchable } from 'react-native';
+import CommentFlatList from '../shareable/commentFlatList'
 
-const months={
-    0:"January",
-    1:"February",
-    2:"March",
-    3:"April",
-    4:"May",
-    5:"June",
-    6:"July",
-    7:"August",
-    8:"September",
-    9:"October",
-    10:"November",
-    11:"December",
-}
+
 
 const IndividualPostScreen=(props)=>{
     //console.log(props)
-    let comment_=[]
+   
     
     const posts = props.route.params.query
     const postDate = props.route.params.postDate
@@ -39,7 +26,7 @@ const IndividualPostScreen=(props)=>{
 
     const [loading, setLoading] = useState(false);
     const[comments,setComments]=useState(0)
-    const [commentsCount,setCommentCount]=useState(posts.data.comments)
+    const [commentsCount,setCommentCount]=useState(0)
     const [currentInputText,setCurrentInputText]=useState("")
     const [postLikes,setPostLikes] = useState(0)
     const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
@@ -47,7 +34,6 @@ const IndividualPostScreen=(props)=>{
     const likeIcosn = {"0":"like2","1":"like1","-1":"like2"}
     const disLikeIcon = {"0":"dislike2","1":"dislike2","-1":"dislike1"}
     const [increaseBy,setIncreaseBy]=useState(0)
-    const [currentLikes,setCurrentLikes]=useState(posts.data.likes)
     posts.data["reactorId"]=uid
     posts.data["reactorName"]=displayName
     posts.data["postId"]=posts.id
@@ -55,7 +41,7 @@ const IndividualPostScreen=(props)=>{
     
 
     const onDisLikePressed = async () =>{
-        if(parseInt( posts.data.likes)!=-1){
+        if(parseInt( postLikes)!=-1){
         
         posts.data["reactorStatus"]="disliked your post"
         posts.data["likes"]=increaseBy -1-postLikes
@@ -66,7 +52,7 @@ const IndividualPostScreen=(props)=>{
         
         updateLikeCount(-1-postLikes,posts.id,posts.data.keyPoints,posts.data.categoryName)
         setPostLikes(-1)
-        setDataCollection(posts.id,uid,{likes:-1})
+        setDataCollection("queries",posts.id,uid,{likes:-1})
         updateCount("NotificationCount",posts.data.authorId,1)
         addDataCollection("Notification",posts.data.authorId,"reaction",posts.data)
         
@@ -83,7 +69,7 @@ const IndividualPostScreen=(props)=>{
         setIncreaseBy(increaseBy+ 1-postLikes)
         updateLikeCount(1-postLikes,posts.id,posts.data.keyPoints,posts.data.categoryName)
         setPostLikes(1)
-        setDataCollection(posts.id,uid,{likes:1})
+        setDataCollection("queries",posts.id,uid,{likes:1})
         updateCount("NotificationCount",posts.data.authorId,1)
         addDataCollection("Notification",posts.data.authorId,"reaction",posts.data)
         
@@ -92,45 +78,27 @@ const IndividualPostScreen=(props)=>{
         }
     }
 
-    const loadComments = async () => {
-        setLoading(true)
-        firebase
-          .firestore()
-          .collection("posts")
-          .doc(posts.id)
-          .collection('comment_writer')
-          .orderBy("written_at", "desc")
-          .onSnapshot((querySnapshot) => {
-            let temp_comments = [];
-            querySnapshot.forEach((doc) => {
-              temp_comments.push({
-                id: doc.id,
-                data: doc.data(),
-              });
-            });
-            setComments(temp_comments);
-           console.log(temp_comments)
-            setLoading(false);
-          })
-          .catch((error) => {
-            setLoading(false);
-            alert(error);
-          });
-        
-      };
+    const setTotalComments = (count) =>{
+        setCommentCount(count)
+    }
+
+    
 
       
       
         
       useEffect(() => {
+        
         let isMounted=true
         if(isMounted)
         {
             setIncreaseBy(parseInt( posts.data.likes))
+            getLikeCounts("queries",posts.id,uid,setPostLikes,isMounted)
         }
-         getLikeCounts(posts.id,uid,setPostLikes,isMounted)
+        
+         console.log("hhhhhh")
          console.log(postLikes)
-        loadComments();
+        //loadComments();
 
         return () => { isMounted = false}
 
@@ -188,61 +156,23 @@ const IndividualPostScreen=(props)=>{
             
         </PostCard>
 
-        <TouchableOpacity style={{padding:30}} onPress={()=>{
+        <TouchableOpacity style={{padding:30,marginBottom:20}} onPress={()=>{
             props.navigation.navigate("Post the comment",{posts})
            
         }}>
         <Text style={{color:"#208",borderBottomColor:"#008",borderBottomWidth:1}}>Write Your Answer</Text>
        
         </TouchableOpacity>
+        <CommentFlatList postId={posts.id} basePost={posts} setCommentCount={setTotalComments} />
+
+        
+
+        
+
               
        
 
-<AntDesign name="checkcircle" size={30} color="#208" style={{marginHorizontal:180,marginBottom:20}}
-             onPress={function(){
-                  comment_={
-                    writer:currUser.displayName,
-                    comment_body:currentInputText,
-                    written_at:firebase.firestore.Timestamp.now(),
-                    writer_id:currUser.uid
 
-                 }
-                 firebase.firestore().collection("notifications").doc(posts.data.userId).collection("notification_details").add({
-                    post:posts, 
-                    name:currUser.displayName,
-                    body:"commented on your post"
-                })
-                for(let omment of comments){
-                    console.log(omment)
-                firebase.firestore().collection("notifications").doc(omment.data.writer_id).collection("notification_details").add({
-                    post:posts,
-                    name:currUser.displayName,
-                    body:"replied your comment"
-                })
-            }
-
-                firebase.firestore().collection("posts").doc(posts.id).collection("comment_writer").add(comment_)
-                firebase.firestore().collection("posts").doc(posts.id).update({
-                    comments:commentsCount+1
-                })
-                setCommentCount(commentsCount+1)
-
-             }}
-             />
-
-             <FlatList
-                data={comments}
-                extraData={comments}
-                renderItem={function({ item } ){
-                    return(
-                       
-                       <CommentList comments={item} />
-                    )
-                }}
-
-
-            />
-        
 
        
     
@@ -314,31 +244,13 @@ const styles=StyleSheet.create({
     },
     likeStyle:{
        
-        bottom:6.8,
-       
-       
+        bottom:6.8,       
         transform: [{rotateY: '180deg'}],
-        
-
-      
         height:30,
-        
-        
-        
     },
     disLikeStyle:{
-       
-       
-        
-       
         bottom:-1.5,
-        
-
         width:36,
-      
-        
-
-       
     },
 
     postTitleStyle:{
@@ -348,13 +260,7 @@ const styles=StyleSheet.create({
         fontSize:17,
         
     },
-    postTitleStyle:{
-        fontFamily:'serif',
-        marginBottom:3,
-        color:"#1AF",
-        fontSize:17,
-        
-    },
+   
     linkCoverName:{
         fontFamily:'serif',
         marginBottom:3,

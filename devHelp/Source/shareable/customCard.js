@@ -65,7 +65,11 @@ const styles= StyleSheet.create({
         borderBottomColor:"black",
         borderWidth:1,
         left:40,
-        width:360
+        width:360,
+        marginBottom:25,
+        backgroundColor:"#978",
+        padding:7
+        
     },
     notificationCardStyle:{
         borderRadius:9,

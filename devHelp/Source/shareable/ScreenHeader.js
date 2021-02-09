@@ -28,11 +28,14 @@ const ScreenHeader=({props})=>{
             rightComponent={{
                 icon: "lock-outline",
                 color: "#fff",
-                onPress: function () {
-                 firebase.auth().signOut()
+                onPress: function  () {
+                  firebase.auth().signOut()
                  .then(()=>{
+                 
+                  
                   auth.setIsLoggedIn(false);
                   auth.setCurrentUser({});
+                 
                  })
                  .catch((error)=>{
                    alert(error)
