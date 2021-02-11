@@ -1,17 +1,5 @@
 import React from 'react';
-import {NavigationContainer, navigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import {Text,View} from 'react-native'
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { createDrawerNavigator } from "@react-navigation/drawer";
-import {  AntDesign ,Ionicons ,Entypo } from "@expo/vector-icons";
-import ScrolableTabView from 'react-native-scrollable-tab-view'
-import SignInScreenActivity from './Source/screens/SignInScreen'
-import SignUpScreenActivity from './Source/screens/SignUpScreen'
-import HomeScreenActivity from './Source/screens/Home'
-import ProfileScreenActivity from './Source/screens/ProfileScreen'
-import NotificationScreenActivity from './Source/screens/NotificationScreen'
-import IndividualPostScreen from './Source/screens/IndividualPost'
+import {NavigationContainer} from '@react-navigation/native';
 import { AuthContext, AuthProvider } from "./Source/provider/AuthProvider";
 import * as firebase from 'firebase' 
 import AppDrawerScreen from './Source/Navigation/AppDrawerStack'
@@ -48,6 +36,10 @@ if(!firebase.apps.length){
 
 
 export default function App() {
+
+  const loadUserCreds =() =>{
+
+  }
 
   
   

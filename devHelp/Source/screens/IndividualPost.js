@@ -21,7 +21,7 @@ const IndividualPostScreen=(props)=>{
     
     const posts = props.route.params.query
     const postDate = props.route.params.postDate
-    const currUser = props.route.params.currUser
+    
     //const nav = props.route.params.nav
 
     const [loading, setLoading] = useState(false);
@@ -37,13 +37,13 @@ const IndividualPostScreen=(props)=>{
     posts.data["reactorId"]=uid
     posts.data["reactorName"]=displayName
     posts.data["postId"]=posts.id
-    
-    
+    console.log("UIDDDDDDD")
+    console.log(uid)
 
     const onDisLikePressed = async () =>{
         if(parseInt( postLikes)!=-1){
         
-        posts.data["reactorStatus"]="disliked your post"
+        posts.data["reactorStatus"]="disliked your question"
         posts.data["likes"]=increaseBy -1-postLikes
         posts.data["reaction_time"]=firebase.firestore.Timestamp.now(),
         setIncreaseBy(increaseBy -1-postLikes)
@@ -61,13 +61,17 @@ const IndividualPostScreen=(props)=>{
     }
 
     const onLikePressed = async () =>{
-
+        console.log("Jacche?")
+        console.log(postLikes)
         if(postLikes!=1){
-        posts.data["reactorStatus"]="liked your post"
+            
+        posts.data["reactorStatus"]="liked your question"
         posts.data["likes"]=increaseBy+ 1-postLikes
         posts.data["reaction_time"]=firebase.firestore.Timestamp.now(),
         setIncreaseBy(increaseBy+ 1-postLikes)
+        console.log("Vitore")
         updateLikeCount(1-postLikes,posts.id,posts.data.keyPoints,posts.data.categoryName)
+        
         setPostLikes(1)
         setDataCollection("queries",posts.id,uid,{likes:1})
         updateCount("NotificationCount",posts.data.authorId,1)

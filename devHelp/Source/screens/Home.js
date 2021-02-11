@@ -8,6 +8,7 @@ import FlashMessage from "react-native-flash-message";
 import ScreenHeader from '../shareable/ScreenHeader'
 import { FontAwesome, Feather, AntDesign ,Ionicons ,Fontisto,Entypo } from "@expo/vector-icons";
 import PostList from '../shareable/PostList'
+
 import * as firebase from 'firebase'
 import "firebase/firestore";
 import CategoryCard from '../shareable/CategoryCard'
@@ -22,7 +23,7 @@ import {getData1Collection} from '../Function/FirebaseFunctions'
 const HomeScreenActivity=(props)=>{
     
   //console.log(props)
-  console.log("okayy")
+  console.log("okayyppppppppppp")
   const [RecentPost, setRecentPost] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -54,7 +55,7 @@ const HomeScreenActivity=(props)=>{
        <View style={{flex:1}}>
         
            <ScreenHeader props ={props} ></ScreenHeader>
-           <CategoryCard>
+           <CategoryCard props={props}>
 
              <Text>Go to category list</Text>
        
@@ -83,9 +84,6 @@ const HomeScreenActivity=(props)=>{
           
            
              />
-              <TouchableOpacity onPress={() => alert('FAB clicked')} style={styles.fab}>
-              <FontAwesome name="pencil-square-o" size={26} color="black" />
-        </TouchableOpacity>
              </View>
             : <View style={{ flex: 1, justifyContent: "center" }}>
         <ActivityIndicator size="large" color="red" animating={true} />

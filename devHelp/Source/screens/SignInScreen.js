@@ -55,12 +55,13 @@ const SignInScreenActivity=(props) =>{
                                     title="  Sign In!"
                                     buttonStyle={styles.buttonView}
                                     onPress={()=>{
-                                        firebase.auth().signInWithEmailAndPassword(Email,Password)
+                                         firebase.auth().signInWithEmailAndPassword(Email,Password)
                                         .then((usersCreds)=>{
                                             console.log("Lets seee")
                                             console.log(usersCreds.user)
-                                            auth.setIsLoggedIn(true);
                                             auth.setCurrentUser(usersCreds.user)
+                                            auth.setIsLoggedIn(true);
+                                            
                                         })
                                         .catch((error)=>{
                                             alert(error)

@@ -3,6 +3,7 @@ import "firebase/firestore";
 import {AuthContext} from '../provider/AuthProvider'
 
 const getData1Collection = async(collection,setCollection,setLoading) =>{
+    console.log("Get Datai aisha gesi")
     setLoading(true)
     firebase
     .firestore()
@@ -49,7 +50,8 @@ const addDataCollection = (collection1,docId1,collection2,data) => {
 
 //nested collection with set
 const setDataCollection = (rootCollection,collection,docId,data) => {
-  console.log(data)
+ 
+  console.log("SET DATA COLLECTION")
   firebase.firestore().collection(rootCollection).doc(collection).collection("likers").doc(docId).set(data).then(()=>{
 
   }).catch((error)=>{
@@ -74,13 +76,13 @@ const updateLikeCount = ( increaseBy,postId,keyPoints,cateGoryName) =>{
   firebase.firestore().collection(cateGoryName).doc(postId).update({ likes: increment })
 }
 //single collection get
-const getSingleCollectionData = async( collection,docId,setCollection,isMounted) =>{
+const getSingleCollectionData = async( collection,docId,setCollection,isMounted,key="count") =>{
   firebase
   .firestore()
   .collection(collection).doc(docId)
   .onSnapshot(docSnapshot => {
     if(docSnapshot.exists && isMounted){
-        setCollection(docSnapshot.data()["count"])
+        setCollection(docSnapshot.data()[key])
         
     }
     // ...

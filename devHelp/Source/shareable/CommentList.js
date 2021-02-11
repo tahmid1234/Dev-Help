@@ -31,7 +31,7 @@ const CommentList=(props)=>{
        
         if(parseInt( commentLikes)!=-1){
         
-        basePost.data["reactorStatus"]="disliked your comment"
+        basePost.data["reactorStatus"]="disliked your answer"
         basePost.data["likes"]=increaseBy -1-commentLikes
         basePost.data["reaction_time"]=firebase.firestore.Timestamp.now()
         basePost.data["comment_body"]=comment
@@ -57,7 +57,7 @@ const CommentList=(props)=>{
     const onLikePressed = async () =>{
        
         if(commentLikes!=1){
-        basePost.data["reactorStatus"]="liked your post"
+        basePost.data["reactorStatus"]="liked your answer"
         basePost.data["likes"]=increaseBy+ 1-commentLikes
         basePost.data["reaction_time"]=firebase.firestore.Timestamp.now() 
         console.log(comment.id)

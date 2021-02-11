@@ -43,13 +43,11 @@ const DataStructureScreenActivity=(props)=>{
 
   
 
-  const a = () =>{
-    console.log("jhaaak")
-  }
+
   useEffect (()=>{
     let isMount = true
     if(isMount)
-    a()
+   
     return ( ()=>{
       isMount=false
     })
@@ -66,11 +64,11 @@ const DataStructureScreenActivity=(props)=>{
        <View style={{flex:1}}>
         
            <ScreenHeader props ={props} ></ScreenHeader>
-           <CategoryCard categoryName={category} dx={"-5"} dy={-18}>
+           <CategoryCard categoryName={category} dx={"-5"} dy={-18} props={props}>
 
-             <Text>{}</Text>
+            
      
-           </CategoryCard>
+           </CategoryCard >
 
            {!queries.length?
             <NoQueriesView/>:

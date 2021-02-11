@@ -6,9 +6,9 @@ const storeDataJSON = async (key, value) => {
   try {
    
     const jsonValue = JSON.stringify(value);
-    console.log(key)
+   
     await AsyncStorage.setItem(key, jsonValue);
-    //alert("Data STored Successfully!"+key);
+    
   } catch (error) {
     alert(error);
   }

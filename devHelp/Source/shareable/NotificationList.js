@@ -1,23 +1,31 @@
 import React , { useState, useEffect }  from 'react'
 import {View,Button,Flatlist,Text,ActivityIndicator,StyleSheet,TouchableOpacity} from 'react-native'
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons,MaterialIcons } from '@expo/vector-icons';
 import {NotificationCard} from '../shareable/customCard'
 import { FontAwesome } from '@expo/vector-icons';
+import convertSecons from '../Function/SeconsToUtcDate'
 
 
 
 const NotificationList=(props)=>{
     console.log("Notificationssss")
     const notification=props.notificatiions
+    const query ={}
     const nav=props.nav
     const [iconName,setIconName]=useState("heart")
     const [statement ,setStatement]=useState("liked your post")
+    const postDate=convertSecons(notification.data.created_at.seconds)
+    let time="1612880477"
+    query.id=notification.data.postId;
+    query.data=props.notificatiions.data
+    console.log(notification.data.reaction_time.seconds)
+    if(notification.data.reaction_time!=undefined)
+        time=notification.data.reaction_time.seconds
+
     
-   
-   
 
-    const checkNotificationStatus=()=>{
-
+    /*const checkNotificationStatus=()=>{
+        
         if(notification.data.body[0]==="c" || notification.data.body[0]==="r" ){
         setIconName("comments")
         setStatement("commented on your post")
@@ -25,24 +33,37 @@ const NotificationList=(props)=>{
         
      
 
-    }
+    }*/
     
     
     useEffect(()=>{
-        checkNotificationStatus()
+        let isMounted=true
+        if(isMounted)
+        
+        return( ()=>{isMounted=false})
     },[])
     return(
+        <TouchableOpacity  onPress={()=>{
+            nav.navigation.navigate("IndivialPost",  {query,postDate} );
+            console.log(notification.data.reaction_time)
+            console.log(query.id)
+        }}>
         <View>
             
            
             <NotificationCard>
-            <Text style={{width:60}}>" "</Text>
-            <FontAwesome name={iconName} size={20} color="#fc6a03"  />
-                <Text style={styles.commenter}>{notification.data.name} </Text>
-                <Text></Text>
-                <Text style = {styles.stateMentStyle}>{notification.data.body} </Text>
+            
+                <View style={{flexDirection:"row"}}>
+                    <Text style={styles.commenter}>{notification.data.reactorName} </Text>
+                    <Text style={{fontSize:15}}>{notification.data.reactorStatus} </Text>
+                </View>
+                <View style={{flexDirection:"row",marginVertical:10}}>
+                    <MaterialIcons name="question-answer" size={18} color="#208" />
+                    <Text style={{fontSize:10}}>{convertSecons(notification.data.reaction_time.seconds)} </Text>
+                </View>
             </NotificationCard>
         </View>
+        </TouchableOpacity>
        
     )
 }
@@ -68,12 +89,12 @@ const styles= StyleSheet.create({
         
     },
     commenter:{
-        fontSize:18,
-        marginTop:16,
-        left:27,
+        fontSize:17.5,
+       
+        
         fontFamily:'serif',
-        color:"#fc6a03" ,
-        position:"absolute"
+        color:"#208" ,
+       
     }
   
 

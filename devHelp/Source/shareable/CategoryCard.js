@@ -1,12 +1,22 @@
-import React from 'react'
-import {StyleSheet,View,Image} from 'react-native';
+import React,{useState} from 'react'
+import {StyleSheet,View,Image,TouchableOpacity,ScrollView} from 'react-native';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { FontAwesome } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
-import {  Circle, Text as SvgText, TextPath, TSpan, G, Svg }
-  from 'react-native-svg';
+import {  Circle, Text as SvgText, TextPath, TSpan, G, Svg } from 'react-native-svg';
+import { Touchable } from 'react-native';
+import {  Overlay } from 'react-native-elements';
+import KeyPointSimilarPost from './keyPointsSimilarPost'
 
 const CategoryCard = ( props)=>{
+  const [displayPopup,setDisplayPopup] = useState(false)
+
+    //allow to pop up
+    const toggleLinkOverlay = () => {
+       setDisplayPopup(!displayPopup);
+    };
+
+
     return(
         <View style={style.categoryCard}>
             <View style={{marginHorizontal:85, marginBottom:50}}>
@@ -36,11 +46,20 @@ const CategoryCard = ( props)=>{
           </SvgText>
          
         </Svg>
-        <View>
-        
-        <AntDesign name="CodeSandbox"   size={40} color="black" style={{ height: 320, width: 120, borderRadius: 60,
-              marginTop: 90,marginHorizontal:81, }}/>
-        </View>
+        <TouchableOpacity 
+          onPress={toggleLinkOverlay}>
+            <View  >
+          
+                <MaterialCommunityIcons name="briefcase-search"   size={40} color="black" style={{ height: 320, width: 120, borderRadius: 60,
+                  marginTop: 90,marginHorizontal:81, }}/>
+            </View>
+        </TouchableOpacity>
+
+        <Overlay isVisible={displayPopup} onBackdropPress={toggleLinkOverlay} overlayStyle={{width:300,height:350,position: 'absolute',}}>
+          <ScrollView keyboardShouldPersistTaps={'always'}>
+          <KeyPointSimilarPost  nav={props.props}  keyPoin1={""} keyPoin2={""} keyPoin3={""}/>  
+          </ScrollView>              
+        </Overlay>
         
        
          </View> 

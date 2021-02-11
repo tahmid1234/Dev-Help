@@ -8,51 +8,33 @@ import {AuthContext} from '../provider/AuthProvider'
 import * as firebase from 'firebase'
 import "firebase/firestore";
 import convertSecons from '../Function/SeconsToUtcDate'
+import {getDoubleCollectionData,simpleCollectionSet} from '../Function/FirebaseFunctions'
+
 
 const NotificationScreenActivity=(props)=>{
-  console.log("halum halum")
+
   const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
   const displayName=AuthContext.Consumer._currentValue.CurrentUser.displayName
-  console.log("Dispaly")
-  const currUser={uid:{uid},displayName:{displayName}}
   
- 
+  
+  
+  
+  const [notificatiionCount,setNotificationCount] = useState(0)
   const [notifications, setNotifications] = useState([]);
   const [loading,setLoading] = useState(false);
   
   const loadNotification = async () => {
-    setLoading(true)
-    firebase
-      .firestore()
-      .collection("notifications")
-      .doc(uid)
-      .collection("notification_details")
 
-      .onSnapshot((querySnapshot) => {
-        let temp = [];
-        console.log("Dhukse")
-        querySnapshot.forEach((doc) => {
-          temp.push({
-            id: doc.id,
-            data: doc.data(),
-          });
-        });
-        setNotifications(temp);
-        console.log("Tempoo")
-        console.log(temp)
-        setLoading(false);
-      })
-      .catch((error) => {
-        setLoading(false);
-        alert(error);
-      });
-    
+    getDoubleCollectionData("Notification",uid,"reaction",setNotifications,setLoading,setNotificationCount)
+   
   };
     
   useEffect(() => {
-    console.log(uid)
-    console.log("hu")
+    let isMounted = true
+    if(isMounted){
     loadNotification();
+    simpleCollectionSet("NotificationCount",uid,0)
+    }
   }, []);
   
 
@@ -70,23 +52,14 @@ const NotificationScreenActivity=(props)=>{
             extraData={notifications}           
             renderItem={function({ item } ){
              
-              console.log(notifications.length+" post length")
+              console.log(item.data.reaction_time+" post length")
              
               return (
-                <TouchableOpacity
-                onPress={function(){
-                  console.log("pressed")
-                 
-                  let posts=item.data.post
-                  let date=convertSecons(posts.data.created_at.seconds)
-                  
-                  props.navigation.navigate("IndivialPost",  {posts,currUser,date} );
-                }}>
                 <NotificationList
                         notificatiions={item} nav={props}
                       
                       />
-                      </TouchableOpacity>
+                     
                       
                   
                  )

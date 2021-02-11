@@ -25,6 +25,15 @@ const CommentCard=(props)=>{
         </View>
     )
 }
+
+const KeyPointQueryCard=(props)=>{
+    return(
+        <View style={styles.keyPointQueryCardStyle}>
+             {props.children}
+        </View>
+    )
+}
+
 const NotificationCard=(props)=>{
     return(
         <View style={styles.notificationCardStyle}>
@@ -72,15 +81,29 @@ const styles= StyleSheet.create({
         
     },
     notificationCardStyle:{
-        borderRadius:9,
         
-        borderBottomColor:"#445588",
-        borderWidth:1,
         
-        width:360,
-        marginHorizontal:30
+        borderBottomColor:"#208",
+        borderWidth:.9,
+        backgroundColor:"#fffff9",
+        padding:10, 
+
+    },
+    keyPointQueryCardStyle:{
+        
+        
+        borderBottomColor:"#208",
+        borderBottomWidth:.9,
+        backgroundColor:"#ffffff",
+        padding:10, 
+        marginHorizontal:10,
+        borderRadius: 5,
+        borderRightWidth:.9,
+        borderLeftWidth:.9
+
 
     }
+
 })
 
-export {AuthCard,PostCard, CommentCard,NotificationCard}
+export {AuthCard,PostCard, CommentCard,NotificationCard,KeyPointQueryCard}

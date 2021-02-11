@@ -1,6 +1,6 @@
 import React , { useState, useEffect,useRef } from 'react'
 import {  Overlay } from 'react-native-elements';
-import {View,Text,Button,StyleSheet,ScrollView,TouchableOpacity,FlatList} from 'react-native'
+import {View,Text,Button,StyleSheet,ScrollView,TouchableOpacity,FlatList,SafeAreaView} from 'react-native'
 import LinkOverlay from '../shareable/linkOverlay'
 import { Entypo } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser'
@@ -28,8 +28,6 @@ const QueryPostScreenActivity = (props) =>{
     console.log(JSON.stringify(props.route.params.categoryName))
     //allow to pop up
     const toggleLinkOverlay = () => {
-
-       
         setLinkVisible(!linkVisible);
     };
 
@@ -49,10 +47,9 @@ const QueryPostScreenActivity = (props) =>{
                 created_at:firebase.firestore.Timestamp.now(),
                 likes:0,
                 comments:0,
-                categoryName:category[props.route.params.categoryName["name"]]
+                categoryName:props.route.params.categoryName["name"]
             }
-
-            console.log(postInfo)
+          
             firebase.firestore().collection(props.route.params.categoryName["name"]).add(postInfo).then((docRef)=>{
 
                 console.log(docRef.id)
@@ -106,7 +103,7 @@ const QueryPostScreenActivity = (props) =>{
 
           <InactiveHeader headerText={"Write Your Question"}/>
 
-           <ScrollView keyboardShouldPersistTaps={"always"}>
+           <ScrollView keyboardShouldPersistTaps={"always"} nestedScrollEnabled={true}   >
 
                 <View style={{marginTop:20,marginBottom:10}} >
                     <View style={styles.fieldSet}>
@@ -116,7 +113,7 @@ const QueryPostScreenActivity = (props) =>{
 
                 </View>
 
-                <KeyPointSimilarPost keyPointValue={refKeyPoint} keyPoin1={category[props.route.params.categoryName["name"]].key1} keyPoin2={category[props.route.params.categoryName["name"]].key2} keyPoin3={category[props.route.params.categoryName["name"]].key3}/>
+                <KeyPointSimilarPost nav={props} keyPointValue={refKeyPoint} keyPoin1={category[props.route.params.categoryName["name"]].key1} keyPoin2={category[props.route.params.categoryName["name"]].key2} keyPoin3={category[props.route.params.categoryName["name"]].key3}/>
           
             
                 <View style={{marginTop:20,marginBottom:10}} >
@@ -161,7 +158,7 @@ const styles = StyleSheet.create({
     fieldSet:{
         margin: 10,
         paddingHorizontal: 10,
-        paddingBottom: 10,
+        
         borderRadius: 5,
         borderWidth: 1,
         alignItems: 'center',

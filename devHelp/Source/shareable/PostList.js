@@ -6,6 +6,7 @@ import { FontAwesome ,Entypo,EvilIcons} from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons'; 
 import * as firebase from 'firebase'
 import "firebase/firestore";
+import { View } from 'react-native';
 
 const PostList =(props)=>{
    
@@ -33,9 +34,12 @@ const PostList =(props)=>{
             nav.navigation.navigate(nextScreen,  {query,currUser,postDate} );
            }}>
        <PostCard>
+           <View style={{flexDirection:"row"}}>
+               
+                <Text style={styles.authorNameStyle}>{query.data.title}</Text>
+                <Zocial name="statusnet" size={24} color="#fff"  style={styles.iconStyle} />
+           </View>
            
-           <Zocial name="statusnet" size={24} color="#fff"  style={styles.iconStyle} />
-           <Text style={styles.authorNameStyle}>{query.data.title}</Text>
            <Text style={styles.dateStyle}>{postDate}</Text>
            <Text numberOfLines={2}  style={styles.postBodyStyle}>{query.data.body}</Text>
           
@@ -85,14 +89,10 @@ const PostList =(props)=>{
 
 const styles=StyleSheet.create({
     iconStyle:{
+        marginHorizontal:3
+
         
-        position:'absolute',
-        right:10,
-        top:10,
-       
-        
-        
-       
+
 
         
     },
@@ -108,7 +108,7 @@ const styles=StyleSheet.create({
         fontSize:18,
         color:"#fff",
         marginBottom:5,
-        paddingRight:20
+        width:320
     },
     dateStyle:{
         

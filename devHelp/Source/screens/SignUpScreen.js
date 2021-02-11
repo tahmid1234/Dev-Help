@@ -10,7 +10,7 @@ import "firebase/firestore";
 
 const SignUpScreenActivity=(props) =>{
     const [Name, setName] = useState("");
-    const [SID, setSID] = useState("");
+    const [PROFESSION, setPROFESSION] = useState("");
     const [Email, setEmail] = useState("");
     const [Password, setPassword] = useState("");
     return(
@@ -35,9 +35,9 @@ const SignUpScreenActivity=(props) =>{
                                 inputStyle={styles.themeColor}
                                 placeholderTextColor="#fc6a03"
                                 leftIcon={<Ionicons name="ios-school" size={24} color="#fc6a03" />}
-                                placeholder="ID"
+                                placeholder="PROFESSION"
                                 onChangeText={function (currentInput) {
-                                    setSID(currentInput);
+                                    setPROFESSION(currentInput);
                                 }}
                                 /> 
                        
@@ -70,7 +70,7 @@ const SignUpScreenActivity=(props) =>{
                                     title="  Sign Up!"
                                     buttonStyle={styles.buttonView}
                                     onPress={()=>{
-                                        if(Name && SID && Email && Password){
+                                        if(Name && PROFESSION && Email && Password){
                                             firebase.auth().createUserWithEmailAndPassword(Email,Password)
                                             .then((userCreds)=>{
                                                
@@ -81,7 +81,7 @@ const SignUpScreenActivity=(props) =>{
                                                 .collection('users')
                                                 .doc(userCreds.user.uid).set({
                                                     name:Name,
-                                                    sid:SID,
+                                                    profession:PROFESSION,
                                                     email:Email,
                                                 }).then(()=>{
                                                     console.log("lklk")
