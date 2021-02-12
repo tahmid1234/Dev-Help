@@ -18,14 +18,15 @@ const storeDataJSON = async (key, value) => {
 const getDataJSON = async (key) => {
   try {
     let data = await AsyncStorage.getItem(key);
+    
     if (data != null) {
       const jsonData = JSON.parse(data);
      
      
       return jsonData;
     } else {
-      ///alert("No data with this key!"+key);
-      return ""
+      return false
+      
     }
   } catch (error) {
     alert(error);

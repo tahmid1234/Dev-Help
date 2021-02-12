@@ -13,11 +13,10 @@ import ProfileScreen from '../screens/ProfileScreen'
 const HomeTab = createMaterialBottomTabNavigator();
 
 const HomeTabScreen = () => {
-  const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
+  const uid=global.userInfo.uid
   const [count,setCount] = useState(0)
   const unseenNotification=()=>{
-      console.log(uid)
-      console.log("zzzzzzzzzzzzz")
+      
       getSingleCollectionData("NotificationCount",uid,setCount,true)
       
     }
@@ -84,7 +83,7 @@ const HomeTabScreen = () => {
                   color="white"
                />
                
-               <View style={{color:"white",height:"60%",width:"60%",top:0,fontSize:10,borderRadius:"30%",backgroundColor:"red",alignItems:"center"}}>
+               <View style={{color:"white",height:"60%",width:"60%",top:0,fontSize:10,borderRadius:30,backgroundColor:"red",alignItems:"center"}}>
                <Text style={{color:"white",fontSize:10}}>{count}</Text>
                </View>
                 

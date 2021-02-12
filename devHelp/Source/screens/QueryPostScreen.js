@@ -23,8 +23,8 @@ const QueryPostScreenActivity = (props) =>{
     const links= useRef({})
    
     const [linkVisible, setLinkVisible] = useState(false);
-    const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
-    const displayName=AuthContext.Consumer._currentValue.CurrentUser.displayName
+    const uid=global.userInfo.uid
+    const displayName=global.userInfo.displayName
     console.log(JSON.stringify(props.route.params.categoryName))
     //allow to pop up
     const toggleLinkOverlay = () => {

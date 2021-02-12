@@ -4,6 +4,7 @@ import AppDrawer from './AppDrawer'
 import QueryPostScreenActivity from '../screens/QueryPostScreen'
 import IndividualPostScreen from '../screens/IndividualPost'
 import CommentPostActivity from '../screens/CommnetPostScreen'
+import OtherUserProfileScreen from '../screens/OtherUserProfileScreen'
 
 const DrawerStack= createStackNavigator();
 
@@ -32,6 +33,13 @@ const DrawerStackNavigation = () => {
         <DrawerStack.Screen
           name="Post the comment"
           component={CommentPostActivity}
+          options={{ headerShown: false }}
+          
+        />
+
+        <DrawerStack.Screen
+          name="Author User Profile"
+          component={OtherUserProfileScreen}
           options={{ headerShown: false }}
           
         />

@@ -3,7 +3,7 @@ import "firebase/firestore";
 import {AuthContext} from '../provider/AuthProvider'
 
 const getData1Collection = async(collection,setCollection,setLoading) =>{
-    console.log("Get Datai aisha gesi")
+  
     setLoading(true)
     firebase
     .firestore()
@@ -145,6 +145,23 @@ const simpleCollectionSet= (collection,docId,value) =>{
 }
 
 
+//single collection get all data similar to getSingleCollectionData() this two functions are to be merged
+const getSingleCollectionAllData = async( collection,docId,setCollection,isMounted) =>{
+  firebase
+  .firestore()
+  .collection(collection).doc(docId)
+  .onSnapshot(docSnapshot => {
+    if(docSnapshot.exists && isMounted){
+        setCollection(docSnapshot.data())
+        console.log(docSnapshot.data())
+        
+    }
+    // ...
+  }, err => {
+    console.log(`Encountered error: ${err}`);
+  });
+}
 
 
-export {getData1Collection,getLikeCounts,setDataCollection,updateLikeCount,updateCount,addDataCollection,getDoubleCollectionData,getSingleCollectionData,simpleCollectionSet,updatePostReactionCount};
+
+export {getData1Collection,getLikeCounts,setDataCollection,updateLikeCount,updateCount,addDataCollection,getDoubleCollectionData,getSingleCollectionData,simpleCollectionSet,updatePostReactionCount,getSingleCollectionAllData};

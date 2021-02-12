@@ -13,8 +13,10 @@ import {getDoubleCollectionData,simpleCollectionSet} from '../Function/FirebaseF
 
 const NotificationScreenActivity=(props)=>{
 
-  const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
-  const displayName=AuthContext.Consumer._currentValue.CurrentUser.displayName
+  const uid=global.userInfo.uid
+  const displayName=global.userInfo.displayName
+  console.log("CurrentUserrrrrrr")
+  console.log(AuthContext.Consumer)
   
   
   

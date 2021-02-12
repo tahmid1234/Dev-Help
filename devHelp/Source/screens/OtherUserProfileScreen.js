@@ -1,18 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import {View,StyleSheet,ActivityIndicator,Text,FlatList,TouchableOpacity} from 'react-native'
-import {storeDataJSON, getDataJSON } from "../Function/AsyncStorageFunction";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {  Input } from "react-native-elements";
+import {View,StyleSheet,ActivityIndicator,Text,FlatList} from 'react-native'
 import {AuthContext} from '../provider/AuthProvider'
-import FlashMessage from "react-native-flash-message";
 import ScreenHeader from '../shareable/ScreenHeader'
-import { FontAwesome, Feather, AntDesign ,Ionicons ,Fontisto,Entypo } from "@expo/vector-icons";
 import PostList from '../shareable/PostList'
-
 import * as firebase from 'firebase'
 import "firebase/firestore";
-import CategoryCard from '../shareable/CategoryCard'
-import {getData1Collection,getSingleCollectionData} from '../Function/FirebaseFunctions'
+import {getData1Collection,getSingleCollectionAllData} from '../Function/FirebaseFunctions'
 
 
 
@@ -22,12 +15,12 @@ import {getData1Collection,getSingleCollectionData} from '../Function/FirebaseFu
 
 
 
-const ProfileScreen=(props)=>{
+const OtherUserProfileScreen=(props)=>{
 
 
-    const uid=global.userInfo.uid
+    const uid=props.route.params.uid
     const displayName=global.userInfo.displayName
-    const [profession,setProfession] = useState("")
+    const [userInfo,setUserInfo] = useState("")
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(false);
     
@@ -36,8 +29,9 @@ const ProfileScreen=(props)=>{
   const loadPosts = async () => {
    
     setLoading(true)
+    console.log(uid)
     getData1Collection(uid,setPosts,setLoading)
-    getSingleCollectionData("users",uid,setProfession,true,"profession")
+    getSingleCollectionAllData("users",uid,setUserInfo,true)
   };
     
   useEffect(() => {
@@ -66,8 +60,8 @@ const ProfileScreen=(props)=>{
            <ScreenHeader props ={props} ></ScreenHeader>
            <View style={{height:"13%",backgroundColor:'black',padding:10,flexDirection:"row",alignItems:"center"}}>
              <View>
-              <Text style={{color:"white"}}>{displayName}</Text>
-              <Text style={{color:"white",fontStyle:"italic",fontSize:10}}>{profession}</Text>
+              <Text style={{color:"white"}}>{userInfo.name}</Text>
+              <Text style={{color:"white",fontStyle:"italic",fontSize:10}}>{userInfo.profession}</Text>
 
               </View>
                <View style={{height:80,width:80,borderRadius:40,backgroundColor:"white",alignItems:"center",borderColor:"#408",borderWidth:2.5,position:"absolute",left:"80%"}}>
@@ -150,4 +144,4 @@ const styles=StyleSheet.create({
 }
 );
 
-export default ProfileScreen
+export default OtherUserProfileScreen

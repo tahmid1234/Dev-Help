@@ -6,6 +6,7 @@ import {AuthContext} from "../provider/AuthProvider"
 import {AuthCard} from '../shareable/customCard'
 
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {storeDataJSON} from '../Function/AsyncStorageFunction'
 import * as firebase from 'firebase'
 import { useScreens } from "react-native-screens";
 
@@ -13,11 +14,15 @@ import { useScreens } from "react-native-screens";
 const SignInScreenActivity=(props) =>{
     const [Email, setEmail] = useState("");
     const [Password, setPassword] = useState("");
+    console.log("bolefellooooooooooo")
     return(
         <AuthContext.Consumer>
             {(auth) => (
               
                 <View style={styles.viewStyle}>
+                    {console.log("hahahahahahahahahah")}
+                    {
+                    console.log(auth)}
                    
                     <AuthCard  >
                    
@@ -60,6 +65,8 @@ const SignInScreenActivity=(props) =>{
                                             console.log("Lets seee")
                                             console.log(usersCreds.user)
                                             auth.setCurrentUser(usersCreds.user)
+                                            global.userInfo=usersCreds.user
+                                            storeDataJSON("devHelper",usersCreds.user)
                                             auth.setIsLoggedIn(true);
                                             
                                         })

@@ -1,14 +1,9 @@
 import React, { useState, useEffect } from "react";
 import {View,StyleSheet,ActivityIndicator,Text,FlatList,TouchableOpacity} from 'react-native'
-import {storeDataJSON, getDataJSON } from "../Function/AsyncStorageFunction";
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import {  Input } from "react-native-elements";
 import {AuthContext} from '../provider/AuthProvider'
 import FlashMessage from "react-native-flash-message";
 import ScreenHeader from '../shareable/ScreenHeader'
-import { FontAwesome, Feather, AntDesign ,Ionicons ,Fontisto,Entypo } from "@expo/vector-icons";
 import PostList from '../shareable/PostList'
-
 import * as firebase from 'firebase'
 import "firebase/firestore";
 import CategoryCard from '../shareable/CategoryCard'
@@ -24,10 +19,17 @@ const HomeScreenActivity=(props)=>{
     
   //console.log(props)
   console.log("okayyppppppppppp")
+  console.log("CurrentUserrrrrrr")
+  
+  let a =AuthContext.Consumer._currentValue.setIsLoggedIn
+  AuthContext.Consumer._currentValue.setIsLoggedIn(true)
+  console.log(AuthContext.Consumer._currentValue.IsLoggedIn)
   const [RecentPost, setRecentPost] = useState("");
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  let ref=""
+  
+  
+
 
 
   const loadPosts = async () => {
@@ -37,7 +39,12 @@ const HomeScreenActivity=(props)=>{
   };
     
   useEffect(() => {
+    let isMounted = true
+    if(isMounted){
     loadPosts();
+    
+    }
+    return(()=>{isMounted=false})
   }, []);
 
     
@@ -53,7 +60,8 @@ const HomeScreenActivity=(props)=>{
             
 
        <View style={{flex:1}}>
-        
+            {console.log("homeeeeee")}
+            {console.log(auth)}
            <ScreenHeader props ={props} ></ScreenHeader>
            <CategoryCard props={props}>
 

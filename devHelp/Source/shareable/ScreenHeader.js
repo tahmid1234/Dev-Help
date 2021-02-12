@@ -1,6 +1,7 @@
 import React from 'react'
 import {Header} from "react-native-elements";
 import {AuthContext} from '../provider/AuthProvider';
+import {removeData} from '../Function/AsyncStorageFunction'
 import * as  firebase from 'firebase';
 
 
@@ -31,10 +32,12 @@ const ScreenHeader=({props})=>{
                 onPress: function  () {
                   firebase.auth().signOut()
                  .then(()=>{
+                   removeData("devHelper")
+                   global.userInfo("")
                  
-                  
-                  auth.setIsLoggedIn(false);
                   auth.setCurrentUser({});
+                  auth.setIsLoggedIn(false);
+                  
                  
                  })
                  .catch((error)=>{

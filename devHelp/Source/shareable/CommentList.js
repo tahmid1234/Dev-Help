@@ -14,8 +14,8 @@ import "firebase/firestore";
 const CommentList=(props)=>{
     const [commentLikes,setcommentLikes] = useState(0)
     const [increaseBy,setIncreaseBy]=useState(0)
-    const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
-    const displayName=AuthContext.Consumer._currentValue.CurrentUser.displayName
+    const uid=global.userInfo.uid
+    const displayName=global.userInfo.displayName
     const likeIcosn = {"0":"like2","1":"like1","-1":"like2"}
     const disLikeIcon = {"0":"dislike2","1":"dislike2","-1":"dislike1"}
     const comment=props.comments

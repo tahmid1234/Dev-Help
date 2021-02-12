@@ -3,7 +3,7 @@ import {View,Text,StyleSheet,ScrollView,TouchableOpacity,Alert,FlatList,Button, 
 import { exp } from 'react-native-reanimated';
 import InputField from './input_field'
 import { Ionicons } from '@expo/vector-icons';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scrollview'
+
 
 
 const LinkOverlay = (props) =>{

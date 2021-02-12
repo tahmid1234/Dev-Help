@@ -29,8 +29,8 @@ const IndividualPostScreen=(props)=>{
     const [commentsCount,setCommentCount]=useState(0)
     const [currentInputText,setCurrentInputText]=useState("")
     const [postLikes,setPostLikes] = useState(0)
-    const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
-    const displayName=AuthContext.Consumer._currentValue.CurrentUser.displayName
+    const uid=global.userInfo.uid
+    const displayName=global.userInfo.displayName
     const likeIcosn = {"0":"like2","1":"like1","-1":"like2"}
     const disLikeIcon = {"0":"dislike2","1":"dislike2","-1":"dislike1"}
     const [increaseBy,setIncreaseBy]=useState(0)
@@ -58,6 +58,12 @@ const IndividualPostScreen=(props)=>{
         
         
         }
+    }
+
+    const navigateToAuthorProfile = () => {
+        let uid = posts.data.authorId
+        props.navigation.navigate("Author User Profile",{uid})
+
     }
 
     const onLikePressed = async () =>{
@@ -121,7 +127,7 @@ const IndividualPostScreen=(props)=>{
                  <Entypo name="man" size={24}  color="#5CF" style={{height:25,width:25,borderRadius:12.5,backgroundColor:"black"}}/>
                  <View>
                      
-                     <Text style={styles.authorTextSTyle}>{posts.data.author}</Text>
+                     <Text  style={styles.authorTextSTyle} onPress={navigateToAuthorProfile} >{posts.data.author} </Text>
                      <Text style={styles.dateStyle}>{postDate}</Text>
                  </View>
              </View>

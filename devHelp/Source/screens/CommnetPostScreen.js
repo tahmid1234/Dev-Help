@@ -18,8 +18,8 @@ const CommentPostActivity = (props) => {
 
     
 
-    const uid=AuthContext.Consumer._currentValue.CurrentUser.uid
-    const displayName=AuthContext.Consumer._currentValue.CurrentUser.displayName
+    const uid=global.userInfo.uid
+    const displayName=global.userInfo.displayName
 
     posts.data["reactorId"]=uid
     posts.data["reactorName"]=displayName

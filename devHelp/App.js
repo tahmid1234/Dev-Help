@@ -1,9 +1,12 @@
-import React from 'react';
+import React,{useState,useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import { AuthContext, AuthProvider } from "./Source/provider/AuthProvider";
 import * as firebase from 'firebase' 
 import AppDrawerScreen from './Source/Navigation/AppDrawerStack'
 import AuthStackScreen from './Source/Navigation/AuthStackNavigation'
+import {getDataJSON} from './Source/Function/AsyncStorageFunction'
+
+
 
 const firebaseConfig = {
   apiKey: "AIzaSyBvDb9x-BbMiHxsg_YendqGfoi9P6CXfLY",
@@ -36,20 +39,56 @@ if(!firebase.apps.length){
 
 
 export default function App() {
+  const [loadScreen,setLoadScreen] = useState(false)
+  const [logIn,setLogIn] = useState(false);
+  
+  const loadUserCreds = async() =>{
+    
+        let response = await getDataJSON("devHelper")
+        global.userInfo=response
+        if(response){
+          console.log("Globaaaaal hook")
+         console.log(logIn)
+         setLogIn(true)
+          
+          
+         
+        }
 
-  const loadUserCreds =() =>{
+     
+          
+        setLoadScreen(true)
+
+
 
   }
 
+  useEffect(()=>{
+    let isMounted = true
+    if(isMounted){
+      loadUserCreds()
+    }
+    return( ()=>{isMounted=false})
+  },[])
+
   
+
+  if(!loadScreen){
+    return null
+  }
+  else{
   
   return (
-
-    <AuthProvider>
+    
+    <AuthProvider >
       <AuthContext.Consumer>
         {(auth) => (
+          
           <NavigationContainer theme={MyTheme}>
-             {auth.IsLoggedIn ? <AppDrawerScreen /> : <AuthStackScreen />}
+            {console.log(auth.IsLoggedIn)}
+            {console.log(logIn)}
+            
+             {logIn || auth.IsLoggedIn ? <AppDrawerScreen /> : <AuthStackScreen />}
           </NavigationContainer>
         )}
       </AuthContext.Consumer>
@@ -58,4 +97,5 @@ export default function App() {
     
    
   );
+        }
 }
