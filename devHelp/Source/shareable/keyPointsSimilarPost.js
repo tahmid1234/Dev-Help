@@ -13,7 +13,7 @@ const KeyPointSimilarPost= (props) =>{
     
     //check if any keyPoint field is emplty
     const checkKeyPoints = () =>{
-        console.log("onpresse")
+        
         if(refKey1.current && refKey2.current && refKey3.current ){
             try {
                 props.keyPointValue["current"]=refKey1.current.toLowerCase().trim()+refKey2.current.toLowerCase().trim()+refKey3.current.toLowerCase().trim()
@@ -31,8 +31,6 @@ const KeyPointSimilarPost= (props) =>{
     useEffect(()=>{
         let isMounted = true
         if(isMounted){
-        console.log("Lets seeeeeeeeeeee")
-        console.log(props)
         checkKeyPoints()
         }
         return ( ()=>{isMounted=false})
@@ -57,8 +55,10 @@ const KeyPointSimilarPost= (props) =>{
             </View>
      </View>
     </View>
-
-    <KeyPointQueryFlatList keyPoints={allKeyPoints} nav={props.nav}/>
+    {allKeyPoints?
+          <KeyPointQueryFlatList keyPoints={allKeyPoints} nav={props.nav}/>
+        :null}
+  
 
    </View>
     

@@ -1,6 +1,6 @@
 import React, {useRef,useState} from 'react'
 import {View,Text,StyleSheet,ScrollView,TouchableOpacity,Alert,FlatList,Button, KeyboardAvoidingView} from 'react-native'
-import { exp } from 'react-native-reanimated';
+
 import InputField from './input_field'
 import { Ionicons } from '@expo/vector-icons';
 
@@ -15,14 +15,18 @@ const LinkOverlay = (props) =>{
 
     const createTwoButtonAlert = () =>
     Alert.alert(
-      "Empty Field",
-      "Please fill up all the reqiured fields",
-      [
-        
-        { text: "OK", onPress: () => console.log("OK Pressed") }
-      ],
-      { cancelable: false }
-    );
+        "Alert Title",
+        "My Alert Msg",
+        [
+          {
+            text: "Cancel",
+            onPress: () => console.log("Cancel Pressed"),
+            style: "cancel"
+          },
+          { text: "OK", onPress: () => console.log("OK Pressed") }
+        ],
+        { cancelable: false }
+      );
 
     const AddLink = () =>{
         if(refDescriptionLink.current && refLink.current){

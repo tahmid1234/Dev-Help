@@ -42,13 +42,22 @@ const NotificationCard=(props)=>{
     )
 }
 
+const IndivudualPostCard=(props)=>{
+    return(
+        <View style={styles.individualPostCardStyle}>
+             {props.children}
+        </View>
+    )
+}
+
 const styles= StyleSheet.create({
     authCardStyle:{
-       marginLeft:20,
-       marginRight:20,
+       marginLeft:"6%",
+       marginRight:"6%",
        
        borderWidth:1,
        borderColor:"#000",
+       padding:8
        
 
 
@@ -56,12 +65,12 @@ const styles= StyleSheet.create({
     postCardStyle:{
         
         borderRadius:9,
-        marginLeft:20,
-        marginRight:20,
+        marginLeft:"5%",
+        marginRight:"5%",
        
-        marginTop:5,
+        marginTop:"2%",
         backgroundColor:"#000",
-        marginBottom:20,
+        marginBottom:"4.5%",
         padding:8,
         borderWidth:1.3,
         borderColor: '#308',
@@ -73,11 +82,11 @@ const styles= StyleSheet.create({
         
         borderBottomColor:"black",
         borderWidth:1,
-        left:40,
-        width:360,
-        marginBottom:25,
-        backgroundColor:"#978",
-        padding:7
+        
+        width:"90.5%",
+        marginBottom:"5.5%",
+        backgroundColor:"#eeeefc",
+        padding:8
         
     },
     notificationCardStyle:{
@@ -102,8 +111,22 @@ const styles= StyleSheet.create({
         borderLeftWidth:.9
 
 
-    }
+    },
+    individualPostCardStyle:{
+        
+        borderRadius:9,
+        
+       
+        marginTop:5,
+        backgroundColor:"#eee",
+        marginBottom:20,
+        padding:8,
+        borderWidth:1.3,
+        borderColor: '#308',
+        
+        
+    },
 
 })
 
-export {AuthCard,PostCard, CommentCard,NotificationCard,KeyPointQueryCard}
+export {AuthCard,PostCard, CommentCard,NotificationCard,KeyPointQueryCard,IndivudualPostCard}

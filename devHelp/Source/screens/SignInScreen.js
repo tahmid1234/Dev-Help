@@ -27,16 +27,17 @@ const SignInScreenActivity=(props) =>{
                     <AuthCard  >
                    
 
-                        <Text style={styles.titleView}>Welcome to Office !</Text>
+                        <Text style={styles.titleView}>Welcome to Dev-Help !</Text>
+                        <Text style={styles.subTitleView}>A developer's community</Text>
 
                        
                         
                         <Input
 
                             inputStyle={styles.themeColor}
-                            leftIcon={<Fontisto name="email" size={24} color="#fc6a03" />}
+                            leftIcon={<Fontisto name="email" size={24} color="#000" />}
                             placeholder="E-mail Address"
-                            placeholderTextColor="#fc6a03"
+                            placeholderTextColor="#777"
                             onChangeText={function (currentInput) {
                                 setEmail(currentInput);
                           }}
@@ -45,8 +46,8 @@ const SignInScreenActivity=(props) =>{
                         <Input
                             inputStyle={styles.themeColor}
                             placeholder="Password"
-                            placeholderTextColor="#fc6a03"
-                            leftIcon={<Feather name="key" size={24} color="#fc6a03" />}
+                            placeholderTextColor="#777"
+                            leftIcon={<Feather name="key" size={24} color="#000" />}
                             secureTextEntry={true}
                             onChangeText={function (currentInput) {
                                 setPassword(currentInput);
@@ -62,8 +63,7 @@ const SignInScreenActivity=(props) =>{
                                     onPress={()=>{
                                          firebase.auth().signInWithEmailAndPassword(Email,Password)
                                         .then((usersCreds)=>{
-                                            console.log("Lets seee")
-                                            console.log(usersCreds.user)
+                                            
                                             auth.setCurrentUser(usersCreds.user)
                                             global.userInfo=usersCreds.user
                                             storeDataJSON("devHelper",usersCreds.user)
@@ -80,7 +80,7 @@ const SignInScreenActivity=(props) =>{
                         </View>
                         <Button
                                     type="clear"
-                                    icon={<AntDesign name="user" size={24} color="#fc6a03" />}
+                                    icon={<AntDesign name="user" size={24} color="#000" />}
                                     title="Don't Have An Account?"
                                     titleStyle={styles.themeColor}
                                     onPress={function(){
@@ -110,25 +110,38 @@ const styles = StyleSheet.create({
     buttonView:{
         
        
-        marginLeft:5,
-        marginRight:5,
-        backgroundColor:"#fc6a03",
+        marginLeft:"2%",
+        marginRight:"2%",
+        backgroundColor:"#000",
         
         
     
     },
     themeColor:{
 
-        color:"#fc6a03"
+        color:"#000"
     },
     titleView:{
 
-        color:"#fc6a03",
+        color:"#000",
         fontSize:23,
-        marginLeft:60,
-        marginVertical:15,
+        marginLeft:"17%",
+       
         justifyContent:"center",
         fontFamily:'sans-serif-medium',
+        
+        
+
+    },
+    subTitleView:{
+
+        color:"#000",
+        fontSize:13,
+        marginLeft:"30%",
+        marginBottom:"4%",
+        justifyContent:"center",
+        
+        fontStyle:"italic"
         
         
 

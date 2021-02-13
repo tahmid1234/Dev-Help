@@ -16,22 +16,9 @@ import {getData1Collection} from '../Function/FirebaseFunctions'
 
 
 const HomeScreenActivity=(props)=>{
-    
-  //console.log(props)
-  console.log("okayyppppppppppp")
-  console.log("CurrentUserrrrrrr")
-  
-  let a =AuthContext.Consumer._currentValue.setIsLoggedIn
-  AuthContext.Consumer._currentValue.setIsLoggedIn(true)
-  console.log(AuthContext.Consumer._currentValue.IsLoggedIn)
-  const [RecentPost, setRecentPost] = useState("");
+ 
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
-  
-  
-
-
-
   const loadPosts = async () => {
    
     setLoading(true)
@@ -63,7 +50,7 @@ const HomeScreenActivity=(props)=>{
             {console.log("homeeeeee")}
             {console.log(auth)}
            <ScreenHeader props ={props} ></ScreenHeader>
-           <CategoryCard props={props}>
+           <CategoryCard props={props} categoryName={"News Feed"} dx={"7"} dy={-18}>
 
              <Text>Go to category list</Text>
        

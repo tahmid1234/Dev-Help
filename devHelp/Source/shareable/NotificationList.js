@@ -19,8 +19,7 @@ const NotificationList=(props)=>{
     query.id=notification.data.postId;
     query.data=props.notificatiions.data
     console.log(notification.data.reaction_time.seconds)
-    if(notification.data.reaction_time!=undefined)
-        time=notification.data.reaction_time.seconds
+    
 
     
 
@@ -36,15 +35,14 @@ const NotificationList=(props)=>{
     }*/
     
     
-    useEffect(()=>{
-        let isMounted=true
-        if(isMounted)
-        
-        return( ()=>{isMounted=false})
-    },[])
+    
+
+
     return(
         <TouchableOpacity  onPress={()=>{
-            nav.navigation.navigate("IndivialPost",  {query,postDate} );
+            query.data["created_at"]=postDate
+             query.data["reaction_time"]=convertSecons(notification.data.reaction_time.seconds)
+            nav.navigation.navigate("Post And Comment",  {query,postDate} );
             console.log(notification.data.reaction_time)
             console.log(query.id)
         }}>
@@ -73,7 +71,7 @@ const styles= StyleSheet.create({
     stateMentStyle:{
         fontSize:15,
         marginTop:20,
-        left:150,
+        left:"50%",
         fontFamily:'serif',
         color:"#c08401",
         position:"absolute"
@@ -82,7 +80,7 @@ const styles= StyleSheet.create({
     },
     iconStyle:{
         
-        width:30,
+        width:"20%",
         position:"absolute",
 
 

@@ -5,7 +5,7 @@ import * as firebase from 'firebase'
 import AppDrawerScreen from './Source/Navigation/AppDrawerStack'
 import AuthStackScreen from './Source/Navigation/AuthStackNavigation'
 import {getDataJSON} from './Source/Function/AsyncStorageFunction'
-
+import FlashMessage from "react-native-flash-message";
 
 
 const firebaseConfig = {
@@ -41,6 +41,7 @@ if(!firebase.apps.length){
 export default function App() {
   const [loadScreen,setLoadScreen] = useState(false)
   const [logIn,setLogIn] = useState(false);
+  global.logInStatus= false
   
   const loadUserCreds = async() =>{
     
@@ -49,7 +50,9 @@ export default function App() {
         if(response){
           console.log("Globaaaaal hook")
          console.log(logIn)
+         global.logInStatus=true
          setLogIn(true)
+         
           
           
          
@@ -65,6 +68,7 @@ export default function App() {
 
   useEffect(()=>{
     let isMounted = true
+    console.log("Logged out ttttttttttt")
     if(isMounted){
       loadUserCreds()
     }
@@ -85,10 +89,13 @@ export default function App() {
         {(auth) => (
           
           <NavigationContainer theme={MyTheme}>
-            {console.log(auth.IsLoggedIn)}
-            {console.log(logIn)}
-            
-             {logIn || auth.IsLoggedIn ? <AppDrawerScreen /> : <AuthStackScreen />}
+           
+           
+            <FlashMessage position="top" />
+            {console.log(auth.logInStatus)}
+             {auth.logInStatus ?
+             auth.IsLoggedIn|| logIn  ? <AppDrawerScreen /> : <AuthStackScreen />
+            :auth.IsLoggedIn ? <AppDrawerScreen /> : <AuthStackScreen />}
           </NavigationContainer>
         )}
       </AuthContext.Consumer>

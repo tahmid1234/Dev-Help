@@ -1,6 +1,6 @@
 import React , { useState, useEffect,useRef } from 'react'
 import {  Overlay } from 'react-native-elements';
-import {View,Text,Button,StyleSheet,ScrollView,TouchableOpacity,FlatList,SafeAreaView} from 'react-native'
+import {View,Text,Button,StyleSheet,ScrollView,TouchableOpacity,LogBox} from 'react-native'
 import LinkOverlay from '../shareable/linkOverlay'
 import { Entypo } from '@expo/vector-icons';
 import * as WebBrowser from 'expo-web-browser'
@@ -11,12 +11,20 @@ import {AuthContext} from '../provider/AuthProvider'
 import * as firebase from 'firebase';
 import "firebase/firestore";
 import InactiveHeader from '../shareable/inactiveHeader'
+import Toast from 'react-native-simple-toast';
+
 
 //keys need to be checked to ensure no invalid char has been passed to fb 
 const QueryPostScreenActivity = (props) =>{
+    LogBox.ignoreAllLogs()
     const category ={"Data- Structure":{"title":"How to implement stack using Linkled lists in c?","key1":"stack","key2":"linked list","key3":"c"},
-                    "Ubuntu":{"title":"How to install mySql-server  in ubuntu","install":"","mysql-server":"Linked List","key3":"ubuntu"},
-                    }
+                    "Ubuntu":{"title":"How to display .csv content in the same format on any website","key1":"cvs","key2":"opencart","key3":"vps"},
+                    "Algorithm":{"title":"Breadth first search on a multiway tree?","key1":"tree","key2":"bfs","key3":"multiway-tree"},
+                    "Android" :{"title":"How to store  data in Sqlite at runtime in android?","key1":"sqlLite","key2":"runtime","key3":"data-storing"},
+                    "OOP" :{"title":"Differences between overriding and overloading?","key1":"overloading","key2":"overriding","key3":"polymorphism"},
+                    "Programming L" :{"title":"How to separate or identify header/footer/carousell & other parts of any website?","key1":"php","key2":"html","key3":"web"},
+                    
+                }
     const refTitle = useRef("");
     const refKeyPoint= useRef("")
     const refBody = useRef("");
@@ -31,11 +39,13 @@ const QueryPostScreenActivity = (props) =>{
         setLinkVisible(!linkVisible);
     };
 
+    
 
 
     //question submission
 
     const onSubmit = ()=>{
+       
         if(refBody.current && refTitle.current && refKeyPoint.current){
             let postInfo ={
                 authorId:uid,
@@ -52,28 +62,30 @@ const QueryPostScreenActivity = (props) =>{
           
             firebase.firestore().collection(props.route.params.categoryName["name"]).add(postInfo).then((docRef)=>{
 
-                console.log(docRef.id)
-                console.log("hoi se")
+                
 
                 firebase.firestore().collection("all").doc(docRef.id).set(postInfo).then(()=>{
 
                   }).catch((error)=>{
                    
-                    alert(error)
+                    Toast.showWithGravity('Please try again later', Toast.LONG, Toast.TOP);
+                    
                   })
 
                   firebase.firestore().collection(refKeyPoint.current).doc(docRef.id).set(postInfo).then(()=>{
     
                   }).catch((error)=>{
                    
-                    alert("hello")
+                    Toast.showWithGravity('Please try again later', Toast.LONG, Toast.TOP);
+                    
                   })
 
                 firebase.firestore().collection(uid).doc(docRef.id).set(postInfo).then(()=>{
     
                   }).catch((error)=>{
                    
-                    alert("hello")
+                    Toast.showWithGravity('Please try again later', Toast.LONG, Toast.TOP);
+                    
                   })
                 
 
@@ -83,9 +95,13 @@ const QueryPostScreenActivity = (props) =>{
 
               }).catch((error)=>{
                
-                alert(error)
+                Toast.showWithGravity('Please try again later', Toast.LONG, Toast.TOP);
               })
         }
+        else{
+            Toast.showWithGravity('Please add content to all the required fields before submitting', Toast.LONG, Toast.TOP);
+        }
+
     }
     
     //opnes ubuntu pastebim
@@ -95,13 +111,12 @@ const QueryPostScreenActivity = (props) =>{
       };
       
      
-    console.log(props.route.params.categoryName["name"])
-    console.log(category[props.route.params.categoryName["name"]].title)
+
   
     return(
         <View style={{flex:1}}>
-
-          <InactiveHeader headerText={"Write Your Question"}/>
+          
+          <InactiveHeader headerText={"New Question"}/>
 
            <ScrollView keyboardShouldPersistTaps={"always"} nestedScrollEnabled={true}   >
 
@@ -125,7 +140,7 @@ const QueryPostScreenActivity = (props) =>{
                 </View>
          
                 <View style={{flexDirection:"row"}}>
-
+                
                     <TouchableOpacity onPress={_handleOpenWithWebBrowserUbuntuPastebin} style={styles.fab}>
                         <Entypo name="code" size={24} color="black" />
                     </TouchableOpacity>
@@ -141,6 +156,7 @@ const QueryPostScreenActivity = (props) =>{
                 </View>
 
                 <View >
+                
                     <TouchableOpacity onPress={onSubmit} style={styles.submitButtonStyle}>
                         <Text style={{color:"white",fontFamily:"serif",fontSize:13}}>Submit</Text>
                     </TouchableOpacity>

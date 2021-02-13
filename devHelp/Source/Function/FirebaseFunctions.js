@@ -34,7 +34,7 @@ const getData1Collection = async(collection,setCollection,setLoading) =>{
 
 //update value by 1-> simple
 
-const updateCount = (collection,docId,increaseBy) =>{
+const updateCount = async(collection,docId,increaseBy) =>{
     const increment = firebase.firestore.FieldValue.increment(increaseBy);
     firebase.firestore().collection(collection).doc(docId).update({ count: increment }).then().catch((error)=>{
       firebase.firestore().collection(collection).doc(docId).set({ count: increment })
@@ -43,7 +43,7 @@ const updateCount = (collection,docId,increaseBy) =>{
 }
 
 //nestedCollection with add
-const addDataCollection = (collection1,docId1,collection2,data) => {
+const addDataCollection = async(collection1,docId1,collection2,data) => {
   firebase.firestore().collection(collection1).doc(docId1).collection(collection2).add(data).then().catch((err)=>{alert(err)})
 
 }
@@ -60,12 +60,12 @@ const setDataCollection = (rootCollection,collection,docId,data) => {
   })
 }
 
-const updatePostReactionCount = ( increaseBy,postId,keyPoints,cateGoryName) =>{
+const updatePostReactionCount = async( increaseBy,postId,keyPoints,cateGoryName) =>{
   const increment = firebase.firestore.FieldValue.increment(increaseBy);
   console.log(postId,cateGoryName,keyPoints)
-  firebase.firestore().collection("all").doc(postId).update({comments:increaseBy})
-  firebase.firestore().collection(keyPoints).doc(postId).update({comments:increaseBy})
-  firebase.firestore().collection(cateGoryName).doc(postId).update({comments:increaseBy})
+  firebase.firestore().collection("all").doc(postId).update({comments:increment})
+  firebase.firestore().collection(keyPoints).doc(postId).update({comments:increment})
+  firebase.firestore().collection(cateGoryName).doc(postId).update({comments:increment})
 }
 
 const updateLikeCount = ( increaseBy,postId,keyPoints,cateGoryName) =>{
@@ -109,13 +109,13 @@ const getLikeCounts = async( rootCollection,collection,docId,setCollection,isMou
 }
 
 //nested collection get without doc
-const getDoubleCollectionData = async (collection1,docId,collection2,setCollection,setLoading,setListCount) => {
+const getDoubleCollectionData = async (collection1,docId,collection2,setCollection,setLoading,setListCount,orderBy="created_at") => {
   setLoading(true)
   console.log("collectionsss")
   console.log(collection1,collection2,docId)
   firebase.firestore().collection(collection1)
                     .doc(docId).collection(collection2)
-                    .orderBy("created_at", "desc")
+                    .orderBy(orderBy, "desc")
                     .onSnapshot ((querySnapshot) => {
                       let temp_posts = [];
                     

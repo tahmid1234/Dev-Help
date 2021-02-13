@@ -1,7 +1,7 @@
 import React , { useState, useEffect }  from 'react'
-import {Text,Button,View,StyleSheet,TextInput,FlatList,TouchableOpacity} from 'react-native'
+import {Text,Button,View,StyleSheet,TextInput,ScrollView,TouchableOpacity,LogBox} from 'react-native'
 import ScreenHeader from '../shareable/ScreenHeader'
-import {PostCard} from '../shareable/customCard'
+import {IndivudualPostCard} from '../shareable/customCard'
 import { MaterialCommunityIcons,Entypo } from '@expo/vector-icons';
 import {  Input } from "react-native-elements";
 import { FontAwesome ,AntDesign} from '@expo/vector-icons';
@@ -12,12 +12,13 @@ import {_handleOpenWithWebBrowserUbuntuPastebin} from '../Function/LinkOpeningFu
 import {setDataCollection,getLikeCounts,updateLikeCount,updateCount, addDataCollection} from '../Function/FirebaseFunctions'
 import {AuthContext} from '../provider/AuthProvider'
 import CommentFlatList from '../shareable/commentFlatList'
+import InactiveHeader from '../shareable/inactiveHeader'
 
 
 
 const IndividualPostScreen=(props)=>{
     //console.log(props)
-   
+    LogBox.ignoreAllLogs();
     
     const posts = props.route.params.query
     const postDate = props.route.params.postDate
@@ -73,7 +74,7 @@ const IndividualPostScreen=(props)=>{
             
         posts.data["reactorStatus"]="liked your question"
         posts.data["likes"]=increaseBy+ 1-postLikes
-        posts.data["reaction_time"]=firebase.firestore.Timestamp.now(),
+        posts.data["reaction_time"]=firebase.firestore.Timestamp.now()
         setIncreaseBy(increaseBy+ 1-postLikes)
         console.log("Vitore")
         updateLikeCount(1-postLikes,posts.id,posts.data.keyPoints,posts.data.categoryName)
@@ -120,11 +121,13 @@ const IndividualPostScreen=(props)=>{
     return(
     
         <View style={styles.containerStyle}>  
-        <ScreenHeader props ={props} ></ScreenHeader>
-        <PostCard >
-            <View style={{backgroundColor:"white",padding:3.5}}>
+        <InactiveHeader headerText={"Question Details"} />
+        <ScrollView keyboardShouldPersistTaps="always">
+        <View style={{padding:8}}>
+        <IndivudualPostCard >
+            <View >
             <View style={{flexDirection:"row"}}>
-                 <Entypo name="man" size={24}  color="#5CF" style={{height:25,width:25,borderRadius:12.5,backgroundColor:"black"}}/>
+                 <Entypo name="man" size={24}  color="#5CF" style={{height:25, width:"6.6%",borderRadius:12.5,backgroundColor:"black"}}/>
                  <View>
                      
                      <Text  style={styles.authorTextSTyle} onPress={navigateToAuthorProfile} >{posts.data.author} </Text>
@@ -139,7 +142,7 @@ const IndividualPostScreen=(props)=>{
          <Text style={styles.linkCoverName}  onPress={() => _handleOpenWithWebBrowserUbuntuPastebin(posts.data.link[posts.data.link["linkCoverName"]])}> {posts.data.link["linkCoverName"]}</Text>
       </View>
       :
-      <Text style={{color:"white"}}>ashe nai</Text>
+      <Text style={{color:"white"}}></Text>
         }
         <View>
            <Text> {posts.data["linkCoverName"]}</Text>
@@ -153,27 +156,27 @@ const IndividualPostScreen=(props)=>{
         <AntDesign name={disLikeIcon[postLikes]} size={24} color="#5CF"  
              style={styles.disLikeStyle} 
              onPress={onDisLikePressed} />
-        </View>
-      
-       
-        <FontAwesome name="comment-o" size={27} color="#5CF"  style={styles.commentStyle}/>
-       
-       
-        <Text style={styles.commentTextStyle}>{commentsCount} Comments</Text>
         
-
-            </View>
+       <Text style={styles.commentTextStyle}>{commentsCount} Answers</Text>
+       <FontAwesome name="comment-o" size={27} color="#5CF"  style={styles.commentStyle}/>
+        </View>
+        </View>
             
-        </PostCard>
-
-        <TouchableOpacity style={{padding:30,marginBottom:20}} onPress={()=>{
+        </IndivudualPostCard>
+        </View>
+        <View>
+            
+        </View>
+        <TouchableOpacity style={{padding:16,marginBottom:20}} onPress={()=>{
             props.navigation.navigate("Post the comment",{posts})
            
         }}>
         <Text style={{color:"#208",borderBottomColor:"#008",borderBottomWidth:1}}>Write Your Answer</Text>
        
         </TouchableOpacity>
+       
         <CommentFlatList postId={posts.id} basePost={posts} setCommentCount={setTotalComments} />
+        </ScrollView>
 
         
 
@@ -192,7 +195,7 @@ const IndividualPostScreen=(props)=>{
 
 const styles=StyleSheet.create({
     authorTextSTyle:{
-        left:1,
+        left:"1.7%",
         
         fontFamily:'serif',
         fontSize:15,
@@ -209,7 +212,7 @@ const styles=StyleSheet.create({
     },
     postBodyStyle:{
        
-        marginBottom:10,
+        marginBottom:"3%",
         color:"#208",
         fontSize:13,
         
@@ -218,7 +221,7 @@ const styles=StyleSheet.create({
 
         color:"#c08401",
         borderColor:"#c08401",
-        marginHorizontal:20,
+        marginHorizontal:"4.5%",
         marginTop:10,
     },
     containerStyle:{
@@ -227,29 +230,28 @@ const styles=StyleSheet.create({
     },
     likeTextStyle:{
        
-        fontSize:18,
+        fontSize:16,
         fontFamily:'serif',
         color:"#5CF",
         bottom:3.1,
-        marginLeft:4
+        marginLeft:"1.1%"
     },
     commentTextStyle:{
-        marginBottom:3,
-        fontSize:14,
+        
+        fontSize:16,
         fontFamily:'serif',
          color:"#5CF",
         
-        width:90,
-        right:36,
-        position:"absolute",
-        bottom:6.8
+        width:"30%",
+        left:"550%",
+       
+       
     },
    
     commentStyle:{
-        position:'absolute',
-        bottom:1,
-        right:10,
-        marginBottom:0,
+        
+       left:"450%"
+        
         
     },
     likeStyle:{
@@ -260,7 +262,7 @@ const styles=StyleSheet.create({
     },
     disLikeStyle:{
         bottom:-1.5,
-        width:36,
+        width:"15%",
     },
 
     postTitleStyle:{
@@ -277,7 +279,7 @@ const styles=StyleSheet.create({
         color:"#1AF",
         fontSize:13,
         textDecorationLine: 'underline',
-        left:2
+        
         
     },
 })

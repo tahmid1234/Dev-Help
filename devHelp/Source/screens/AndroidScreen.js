@@ -10,14 +10,14 @@ import LoadingView from "../shareable/loadingView"
 import NoQueriesView from "../shareable/noQueriesView"
 import {getData1Collection} from '../Function/FirebaseFunctions'
 
-const DataStructureScreenActivity=(props)=>{
+const AndroidScreenActivity=(props)=>{
     
   //console.log(props)
   //console.log("okayy")
   
   const [queries, setQueries] = useState([]);
   const [loading, setLoading] = useState(false);
-  const category="Data- Structure"
+  const category="Android"
  
   const loadQueries = async () => {
     
@@ -64,7 +64,7 @@ const DataStructureScreenActivity=(props)=>{
        <View style={{flex:1}}>
         
            <ScreenHeader props ={props} ></ScreenHeader>
-           <CategoryCard categoryName={category} dx={"-5"} dy={-18} props={props}>
+           <CategoryCard categoryName={category} dx={"11.5"} dy={-18} props={props}>
 
             
      
@@ -85,4 +85,4 @@ const DataStructureScreenActivity=(props)=>{
          </AuthContext.Consumer>
     );
 }
-export default DataStructureScreenActivity
+export default AndroidScreenActivity

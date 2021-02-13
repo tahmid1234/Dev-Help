@@ -10,21 +10,19 @@ import LoadingView from "../shareable/loadingView"
 import NoQueriesView from "../shareable/noQueriesView"
 import {getData1Collection} from '../Function/FirebaseFunctions'
 
-const DataStructureScreenActivity=(props)=>{
+const AlgorithmScreenActivity=(props)=>{
     
   //console.log(props)
   //console.log("okayy")
   
   const [queries, setQueries] = useState([]);
   const [loading, setLoading] = useState(false);
-  const category="Data- Structure"
+  const category="Algorithm"
  
   const loadQueries = async () => {
     
     await getData1Collection(category,setQueries,setLoading)
-    console.log("Queryyyy")
-   
-    console.log("Queryyyy")
+
     
     
   };
@@ -64,7 +62,7 @@ const DataStructureScreenActivity=(props)=>{
        <View style={{flex:1}}>
         
            <ScreenHeader props ={props} ></ScreenHeader>
-           <CategoryCard categoryName={category} dx={"-5"} dy={-18} props={props}>
+           <CategoryCard categoryName={category} dx={"7"} dy={-18} props={props}>
 
             
      
@@ -85,4 +83,4 @@ const DataStructureScreenActivity=(props)=>{
          </AuthContext.Consumer>
     );
 }
-export default DataStructureScreenActivity
+export default AlgorithmScreenActivity

@@ -12,6 +12,7 @@ const KeyPointQueryFlatList = (props) =>{
    
 
     const loadQueries = async () => {
+    if(props.keyPoints)
     await getData1Collection(props.keyPoints,setQueries,setLoading)
   };
 

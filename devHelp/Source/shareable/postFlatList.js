@@ -16,7 +16,7 @@ const PostFlatList =(props)=>{
 
     return(
         <View style={{flex:1}}>
-              <FlashMessage position="top" /> 
+             
             <FlatList
             
             data={queries}
@@ -42,15 +42,11 @@ const PostFlatList =(props)=>{
               <TouchableOpacity onPress={() => 
               
               //This onpress function navigates to Question Witting Screen
-              { let a=[{key:5}]
-                 props.props.navigation.navigate("QueryPost",{categoryName})
-                showMessage({
-                message: "My message title",
-                description: "My message description",
-                type: "default",
-                backgroundColor: "purple", // background color
-                color: "#606060", // text color
-              })}} style={styles.fab}>
+              { 
+                
+                
+              props.props.navigation.navigate("QueryPost",{categoryName})
+              }} style={styles.fab}>
               <FontAwesome name="pencil-square-o" size={26} color="black" />
         </TouchableOpacity>
         </View>

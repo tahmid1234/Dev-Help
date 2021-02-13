@@ -5,11 +5,16 @@ import InactiveHeader from '../shareable/inactiveHeader'
 import {_handleOpenWithWebBrowserUbuntuPastebin} from '../Function/LinkOpeningFunction'
 import LinkOverlay from '../shareable/linkOverlay'
 import { Entypo,AntDesign } from '@expo/vector-icons';
-import {  Overlay } from 'react-native-elements';
+import {  colors, Overlay } from 'react-native-elements';
 import {addDataCollection,updateCount,updatePostReactionCount} from '../Function/FirebaseFunctions'
+import Toast from 'react-native-simple-toast';
 import {AuthContext} from '../provider/AuthProvider'
 import * as firebase from 'firebase';
 import "firebase/firestore";
+import { showMessage, hideMessage } from "react-native-flash-message";
+
+
+
 
 
 const CommentPostActivity = (props) => {
@@ -35,9 +40,7 @@ const CommentPostActivity = (props) => {
         setLinkVisible(!linkVisible);
     };
 
-    const onSubmit = ( ) =>{
-
-        if(refBody.current){
+    const populateDb = async( ) =>{
 
         let commentDetails = {
             authorId:uid,
@@ -54,18 +57,37 @@ const CommentPostActivity = (props) => {
         posts.data["comments"]=parseInt(posts.data.comments)+1
         posts.data["reaction_time"]=firebase.firestore.Timestamp.now(),
 
-        addDataCollection("PostComments",posts.id,"CommentDetails",commentDetails)
-        updateCount("NotificationCount",posts.data.authorId,1)
-        addDataCollection("Notification",posts.data.authorId,"reaction",posts.data)
-        updatePostReactionCount(1,posts.id,posts.data.keyPoints,posts.data.categoryName)
+        await addDataCollection("PostComments",posts.id,"CommentDetails",commentDetails)
+       
+        await updateCount("NotificationCount",posts.data.authorId,1)
+       
+        await addDataCollection("Notification",posts.data.authorId,"reaction",posts.data)
+
+        await updatePostReactionCount(1,posts.id,posts.data.keyPoints,posts.data.categoryName)
+
+    }
+
+    const onSubmit = ( ) =>{
+        //toast({ message: 'Check me out!', ...config })
+        
+
+        if(refBody.current){
+
+        populateDb()
+        console.log("AAAAAADDDDD")
         props.navigation.goBack()
+    }
+
+    else{
+        Toast.showWithGravity('Please add content to all the field before submitting', Toast.LONG, Toast.TOP);
     }
 
     }
 
     return(
         <View  style={{flex:1}}>
-            <InactiveHeader headerText={"Write Your Answer"}/>
+            
+            <InactiveHeader headerText={"New Answer"}/>
             <ScrollView  keyboardShouldPersistTaps={'always'}>
 
                     <View style={{marginTop:20,marginBottom:10}} >
@@ -94,7 +116,7 @@ const CommentPostActivity = (props) => {
 
                 <View >
                 
-                <AntDesign name="checkcircle" size={30} color="#208" style={{marginHorizontal:180,marginBottom:20}}
+                <AntDesign name="checkcircle" size={30} color="#208" style={{marginHorizontal:"46%",marginBottom:"26%"}}
                     onPress={onSubmit}
                 />
                 </View>

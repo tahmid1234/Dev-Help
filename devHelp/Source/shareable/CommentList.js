@@ -98,7 +98,8 @@ const CommentList=(props)=>{
     
     
     return(
-        <View style={{flexDirection:"row"}}>
+        <View style={{flexDirection:"row",padding:8}}>
+            
              <MaterialCommunityIcons name="human-greeting" size={36} color="#208" style={styles.iconStyle}/>
            
         <CommentCard>
@@ -140,7 +141,7 @@ const styles= StyleSheet.create({
         CommenterStyle:{
             fontSize:12,
             
-            left:5,
+            left:"14%",
             fontFamily:'serif',
             color:"#208",
             fontWeight:"bold",
@@ -149,22 +150,24 @@ const styles= StyleSheet.create({
         },
         iconStyle:{
             
-            width:30,
-            position:"absolute",
-            left:6.6,
-            top:13,
+            width:"7.5%",
+           
+           
+            
             borderRadius:15,
             borderWidth:1,
             height:30,
-            backgroundColor:"#978"
+            backgroundColor:"#978",
+            marginRight:"1.9%",
+            top:".4%"
 
             
         },
         postBodeStyle:{
-            color:"#eee",
+            color:"#222",
             
             fontSize:12.4,
-             left:5,
+            left:"1%",
             
         },
         dateStyle:{
@@ -175,7 +178,7 @@ const styles= StyleSheet.create({
             fontStyle:'italic',
             position:"absolute",
             
-            right:12
+            right:"-1%",
         },
 
         linkCoverName:{
@@ -184,7 +187,7 @@ const styles= StyleSheet.create({
             color:"#1BF",
             fontSize:13,
             textDecorationLine: 'underline',
-            left:2,
+            
             marginBottom:4
             
         },
@@ -193,10 +196,12 @@ const styles= StyleSheet.create({
             bottom:6.8,       
             transform: [{rotateY: '180deg'}],
             height:30,
+            left:"1%",
         },
         disLikeStyle:{
             bottom:-1.5,
-            width:36,
+            width:"20%",
+            left:"1%",
         },
         likeTextStyle:{
        
@@ -204,7 +209,8 @@ const styles= StyleSheet.create({
             fontFamily:'serif',
             color:"#208",
             bottom:3.1,
-            marginLeft:4
+            marginLeft:4,
+            left:"1%",
         },
 
         

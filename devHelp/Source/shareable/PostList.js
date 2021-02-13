@@ -25,13 +25,15 @@ const PostList =(props)=>{
     console.log(likeCount)
     
     let postDate=dateObj.substr(0,dateObj.length-13)
+    
    
   
     
     return(
         
         <TouchableOpacity onPress={function(){
-            nav.navigation.navigate(nextScreen,  {query,currUser,postDate} );
+            query.data["created_at"]=postDate
+            nav.navigation.navigate("Post And Comment",  {query,postDate} );
            }}>
        <PostCard>
            <View style={{flexDirection:"row"}}>
@@ -48,28 +50,7 @@ const PostList =(props)=>{
 
 
            <AntDesign name="like1" size={20} color="#fff"  style={styles.likeStyle} 
-           onPress ={function(){
-            setIconName("heart")
-           
-           firebase.firestore().collection("query").doc(query.id).collection("likers").doc(currUser.uid).set({
-               liker:currUser.displayName
-           })
-           firebase.firestore().collection("query").doc(query.id).update({
-               likes:likeCount+1
-           })
-           firebase.firestore().collection("notifications").doc(query.data.userId).collection("notification_details").add({
-            post:query,
-            name:currUser.displayName,
-            body:"liked your post"
-        })
-            let a=likeCount+1
-            
-            setLikeCount(a)
-            
-           
-            
-            
-           }}/>
+           />
           
         <Text style={styles.likeTextStyle} >{query.data.likes} Likes</Text>
         <Text style={styles.commentTextStyle}>{query.data.comments} Answers</Text>
@@ -89,7 +70,7 @@ const PostList =(props)=>{
 
 const styles=StyleSheet.create({
     iconStyle:{
-        marginHorizontal:3
+        marginHorizontal:"1.5%"
 
         
 
@@ -98,8 +79,8 @@ const styles=StyleSheet.create({
     },
     commentStyle:{
         position:'absolute',
-        bottom:6.8,
-        right:10,
+        bottom:"5.3%",
+        right:"2%",
         marginBottom:0,
         
     },
@@ -107,19 +88,19 @@ const styles=StyleSheet.create({
         fontFamily:'serif',
         fontSize:18,
         color:"#fff",
-        marginBottom:5,
-        width:320
+        marginBottom:".9%",
+        width:"92%"
     },
     dateStyle:{
         
-        marginBottom:5,
+        marginBottom:"2%",
         color:"#fff",
         fontSize:10,
         fontStyle:"italic"
     },
     postBodyStyle:{
         fontFamily:'serif',
-        marginBottom:10,
+        marginBottom:"2.4%",
         color:"#fff",
         fontSize:15,
         
@@ -129,35 +110,35 @@ const styles=StyleSheet.create({
         
     },
     likeStyle:{
-        marginBottom:3,
-        bottom:0,
-        width:36,
-        left:0,
+        marginBottom:"1%",
+        
+        width:"12%",
+       
         borderColor:"#108",
         
     },
    
     likeTextStyle:{
-        marginBottom:3,
+        marginBottom:".5%",
         fontSize:14,
         fontFamily:'serif',
         color:"#fff",
         
-        width:60,
-        left:31,
+        width:"20%",
+        left:"9%",
         position:"absolute",
         bottom:6.8
     },
     commentTextStyle:{
-        marginBottom:3,
+        marginBottom:".5%",
         fontSize:14,
         fontFamily:'serif',
         color:"#fff",
         
-        width:90,
-        right:21,
+        width:"27%",
+        right:"6.5%",
         position:"absolute",
-        bottom:6.8
+        bottom:"5.3%"
     },
 
   

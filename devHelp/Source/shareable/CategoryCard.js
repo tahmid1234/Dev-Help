@@ -72,13 +72,13 @@ const CategoryCard = ( props)=>{
 const style= StyleSheet.create({
     categoryCard:{
         borderRadius:9,
-        marginLeft:20,
-        marginRight:20,
+        marginLeft:"5%",
+        marginRight:"5%",
         borderColor:"#000",
-        marginTop:5,
+        marginTop:"1.3%",
         backgroundColor:"#000",
         marginBottom:20,
-        height:120,
+        height:"15.75%",
         borderWidth:1,
         
 

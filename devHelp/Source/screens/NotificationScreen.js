@@ -27,7 +27,7 @@ const NotificationScreenActivity=(props)=>{
   
   const loadNotification = async () => {
 
-    getDoubleCollectionData("Notification",uid,"reaction",setNotifications,setLoading,setNotificationCount)
+    getDoubleCollectionData("Notification",uid,"reaction",setNotifications,setLoading,setNotificationCount,"reaction_time")
    
   };
     

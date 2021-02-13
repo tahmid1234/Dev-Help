@@ -16,4 +16,7 @@ npm install react-native-scrollable-tab-view
 npm i react-native-flash-message
 expo install expo-web-browser
 </KeyboardAwareScrollView>
-
+npm install --save react-native-flash-message
+npm i react-native-simple-toast
+npm i react-native-toast-message
+npm i react-native-styled-toast@1.0.13

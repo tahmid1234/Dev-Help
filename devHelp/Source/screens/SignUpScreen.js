@@ -20,12 +20,13 @@ const SignUpScreenActivity=(props) =>{
                     <AuthCard  >
                    
 
-                        <Text style={styles.titleView}>Welcome to Office !</Text>
+                        <Text style={styles.titleView}>Welcome to Dev-Help !</Text>
+                        <Text style={styles.subTitleView}>A developer's community</Text>
                         <Input
                              inputStyle={styles.themeColor}
-                            leftIcon={<Ionicons name="ios-person" size={24} color="#fc6a03"/>}
+                            leftIcon={<Ionicons name="ios-person" size={24} color="#000"/>}
                             placeholder="Name"
-                            placeholderTextColor="#fc6a03"
+                            placeholderTextColor="#777"
                             onChangeText={function (currentInput) {
                                 setName(currentInput);
                             }}
@@ -33,9 +34,9 @@ const SignUpScreenActivity=(props) =>{
 
                         <Input
                                 inputStyle={styles.themeColor}
-                                placeholderTextColor="#fc6a03"
-                                leftIcon={<Ionicons name="ios-school" size={24} color="#fc6a03" />}
-                                placeholder="PROFESSION"
+                                placeholderTextColor="#777"
+                                leftIcon={<AntDesign name="profile" size={24} color="#000" />}
+                                placeholder="Profession"
                                 onChangeText={function (currentInput) {
                                     setPROFESSION(currentInput);
                                 }}
@@ -44,9 +45,9 @@ const SignUpScreenActivity=(props) =>{
                         <Input
 
                             inputStyle={styles.themeColor}
-                            leftIcon={<Fontisto name="email" size={24} color="#fc6a03" />}
+                            leftIcon={<Fontisto name="email" size={24} color="#000" />}
                             placeholder="E-mail Address"
-                            placeholderTextColor="#fc6a03"
+                            placeholderTextColor="#777"
                             onChangeText={function (currentInput) {
                                 setEmail(currentInput);
                           }}
@@ -55,8 +56,8 @@ const SignUpScreenActivity=(props) =>{
                         <Input
                             inputStyle={styles.themeColor}
                             placeholder="Password"
-                            placeholderTextColor="#fc6a03"
-                            leftIcon={<Feather name="key" size={24} color="#fc6a03" />}
+                            placeholderTextColor="#777"
+                            leftIcon={<Feather name="key" size={24} color="#000" />}
                             secureTextEntry={true}
                             onChangeText={function (currentInput) {
                                 setPassword(currentInput);
@@ -65,7 +66,7 @@ const SignUpScreenActivity=(props) =>{
 
                         <View style={styles.buttonView}>
                         <Button
-                                    color="#fc6a03"
+                                    color="#000"
                                     icon={<AntDesign name="user" size={24} color='white' />}
                                     title="  Sign Up!"
                                     buttonStyle={styles.buttonView}
@@ -106,7 +107,7 @@ const SignUpScreenActivity=(props) =>{
                         </View>
                         <Button
                                     type="clear"
-                                    icon={<Entypo name="login" size={24} color="#fc6a03" />}
+                                    icon={<Entypo name="login" size={24} color="#000" />}
                                     
                                     title=" Already have an account"
                                     titleStyle={styles.themeColor}
@@ -135,29 +136,37 @@ const styles = StyleSheet.create({
     buttonView:{
         
        
-        marginLeft:5,
-        marginRight:5,
-        backgroundColor:"#fc6a03",
+        marginLeft:"2%",
+        marginRight:"2%",
+        backgroundColor:"#000",
         
         
     
     },
     themeColor:{
 
-        color:"#fc6a03"
+        color:"#000"
     },
     titleView:{
 
-        color:"#fc6a03",
+        color:"#000",
         fontSize:23,
-        marginLeft:60,
-        marginVertical:15,
+        marginLeft:"17%",
         justifyContent:"center",
         fontFamily:'sans-serif-medium',
         
         
 
-    }
+    },
+    subTitleView:{
+
+        color:"#000",
+        fontSize:13,
+        marginLeft:"30%",
+        marginBottom:"4%",
+        justifyContent:"center",
+        
+        fontStyle:"italic"}
     
    
   });
